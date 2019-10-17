@@ -8,71 +8,18 @@
     android:orientation="vertical"
     android:paddingBottom="8dp">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/finView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingStart="16dp"-->
-    <!--        android:paddingEnd="16dp"-->
-    <!--        android:textSize="24sp"-->
-    <!--        app:layout_constraintBottom_toBottomOf="parent" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/nameView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingStart="16dp"-->
-    <!--        android:paddingEnd="16dp"-->
-    <!--        android:textSize="24sp" />-->
-    <!--    <TextView-->
-    <!--        android:id="@+id/noView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingStart="16dp"-->
-    <!--        android:paddingEnd="16dp"-->
-    <!--        android:textSize="24sp" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/descView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingStart="16dp"-->
-    <!--        android:paddingEnd="16dp"-->
-    <!--        android:textSize="24sp" />-->
-    <!--    <TextView-->
-    <!--        android:id="@+id/dateView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingStart="16dp"-->
-    <!--        android:paddingEnd="16dp"-->
-    <!--        android:textSize="24sp" />-->
-    <!--    <TextView-->
-    <!--        android:id="@+id/owedView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingStart="16dp"-->
-    <!--        android:paddingEnd="16dp"-->
-    <!--        android:textSize="24sp" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/ownedView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:paddingStart="16dp"-->
-    <!--        android:paddingEnd="16dp"-->
-    <!--        android:textSize="24sp" />-->
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@tools:sample/avatars[0]"
+        app:srcCompat="@drawable/ic_sleep_5"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -122,7 +69,7 @@
         tools:text="description" />
 
     <TextView
-        android:id="@+id/owedView"
+        android:id="@+id/pNameView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -134,14 +81,14 @@
         tools:text="product" />
 
     <TextView
-        android:id="@+id/ownedView"
+        android:id="@+id/pNoView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:paddingLeft="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/noView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.727"
+        app:layout_constraintHorizontal_bias="0.619"
         app:layout_constraintStart_toEndOf="@+id/noView"
         app:layout_constraintTop_toTopOf="@+id/noView"
         app:layout_constraintVertical_bias="0.0"
@@ -197,9 +144,10 @@
         android:paddingLeft="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/descView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toEndOf="@+id/descView"
         app:layout_constraintTop_toTopOf="@+id/descView"
+        app:layout_constraintVertical_bias="0.0"
         tools:text="date" />
 
     <TextView
