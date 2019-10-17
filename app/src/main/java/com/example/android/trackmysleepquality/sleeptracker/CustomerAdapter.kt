@@ -5,34 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.ListAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.Customer
 
-class CustomerAdapter : RecyclerView.Adapter<CustomerAdapter.ViewHolder>() {
-    var data = listOf<Customer>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+class CustomerAdapter : ListAdapter<Customer,CustomerAdapter.ViewHolder>(CustomerDiffCallback()) {
 
-    override fun getItemCount(): Int = data.size
 
 
     override fun onBindViewHolder(holder: CustomerAdapter.ViewHolder, position: Int) {
-        val item = data[position]
+        val item = getItem(position)
         holder.bind(item)
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerAdapter.ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.customer_item_view, parent, false) as LinearLayout
-        return CustomerAdapter.ViewHolder(view)
+        return ViewHolder.from(parent)
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class ViewHolder private constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameView: TextView = itemView.findViewById(R.id.nameView)
         val noView: TextView = itemView.findViewById(R.id.noView)
         val finView: TextView = itemView.findViewById(R.id.finView)
@@ -60,7 +54,26 @@ class CustomerAdapter : RecyclerView.Adapter<CustomerAdapter.ViewHolder>() {
                 ownedView.setTextColor(Color.GRAY)
             }
         }
+        companion object {
+             fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater.inflate(R.layout.customer_item_view, parent, false) as LinearLayout
+                return ViewHolder(view)
+            }
+        }
     }
 
+
+
+}
+
+class CustomerDiffCallback : DiffUtil.ItemCallback<Customer>(){
+    override fun areItemsTheSame(oldItem: Customer, newItem: Customer): Boolean {
+        return oldItem.id == newItem.id
+    }
+
+    override fun areContentsTheSame(oldItem: Customer, newItem: Customer): Boolean {
+        return oldItem == newItem
+    }
 
 }

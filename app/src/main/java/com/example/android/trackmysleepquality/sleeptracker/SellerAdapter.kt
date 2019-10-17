@@ -25,11 +25,10 @@ class SellerAdapter: RecyclerView.Adapter<SellerAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SellerAdapter.ViewHolder {
-        val layoutInflater = LayoutInflater.from(parent.context)
-        val view = layoutInflater.inflate(R.layout.customer_item_view, parent, false) as ConstraintLayout
-        return SellerAdapter.ViewHolder(view)
+        return ViewHolder.from(parent)
     }
-    class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+
+    class ViewHolder private constructor(itemView: View):RecyclerView.ViewHolder(itemView){
         val nameView: TextView = itemView.findViewById(R.id.nameView)
         val noView: TextView = itemView.findViewById(R.id.noView)
         val finView: TextView = itemView.findViewById(R.id.finView)
@@ -56,6 +55,13 @@ class SellerAdapter: RecyclerView.Adapter<SellerAdapter.ViewHolder>() {
             dateView.text = item.date
             expireView.text = item.expireDate
             quantityView.text = item.quantity
+        }
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val view = layoutInflater.inflate(R.layout.customer_item_view, parent, false) as ConstraintLayout
+                return ViewHolder(view)
+            }
         }
     }
 
