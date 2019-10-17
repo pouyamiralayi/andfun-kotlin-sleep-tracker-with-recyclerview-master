@@ -146,7 +146,7 @@ class SleepTrackerFragment : Fragment() {
 
         dataViewModel.customers.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.data = it
+                adapter.submitList(it)
 //                adapter.addHeaderAndSubmitList(it)
             }
         })
