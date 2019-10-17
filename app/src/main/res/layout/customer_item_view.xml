@@ -27,7 +27,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_sleep_5"
+            app:customerImage="@{customer}"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toTopOf="@+id/imageView"
-            tools:text="fin year" />
+            tools:text="@{customer.finYear}" />
 
         <TextView
             android:id="@+id/nameView"
@@ -54,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/finView"
-            tools:text="customer name" />
+            tools:text="@{customer.customerName}" />
 
         <TextView
             android:id="@+id/noView"
@@ -67,7 +67,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/nameView"
-            tools:text="customer no" />
+            tools:text="@{customer.customerNo}" />
 
         <TextView
             android:id="@+id/descView"
@@ -80,7 +80,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/noView"
-            tools:text="description" />
+            tools:text="@{customer.description}" />
 
         <TextView
             android:id="@+id/owedView"
@@ -93,7 +93,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/descView"
-            tools:text="owed" />
+            tools:text="@{customer.owed}" />
 
         <TextView
             android:id="@+id/ownedView"
@@ -107,6 +107,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/owedView"
-            tools:text="owned" />
+            tools:text="@{customer.owned}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

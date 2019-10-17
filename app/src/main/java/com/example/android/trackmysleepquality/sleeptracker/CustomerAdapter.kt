@@ -24,6 +24,8 @@ class CustomerAdapter : ListAdapter<Customer, CustomerAdapter.ViewHolder>(Custom
     class ViewHolder private constructor(val binding: CustomerItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Customer) {
+            binding.customer = item
+
             binding.finView.text = item.finYear
             binding.nameView.text = item.customerName
             binding.noView.text = item.customerNo
@@ -31,17 +33,7 @@ class CustomerAdapter : ListAdapter<Customer, CustomerAdapter.ViewHolder>(Custom
             binding.owedView.text = item.owed
             binding.ownedView.text = item.owned
 
-            if (!item.owed.equals("0")) {
-                binding.owedView.setTextColor(Color.RED)
-            } else {
-                binding.owedView.setTextColor(Color.GRAY)
-            }
 
-            if (!item.owned.equals("0")) {
-                binding.ownedView.setTextColor(Color.GREEN)
-            } else {
-                binding.ownedView.setTextColor(Color.GRAY)
-            }
         }
 
         companion object {

@@ -16,13 +16,57 @@
 
 package com.example.android.trackmysleepquality.sleeptracker
 
+import android.graphics.Color
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.convertDurationToFormatted
+import com.example.android.trackmysleepquality.convertNumericQualityToCurrency
 import com.example.android.trackmysleepquality.convertNumericQualityToString
+import com.example.android.trackmysleepquality.database.Customer
 import com.example.android.trackmysleepquality.database.SleepNight
+
+@BindingAdapter("customerImage")
+fun ImageView.setCustomerImage(item: Customer?) {
+    item?.let {
+        setImageResource(when (item.owed) {
+//             -> R.drawable.ic_sleep_0
+            "0" -> R.drawable.ic_sleep_1
+//            2 -> R.drawable.ic_sleep_2
+//            3 -> R.drawable.ic_sleep_3
+//            4 -> R.drawable.ic_sleep_4
+//            5 -> R.drawable.ic_sleep_5
+            else -> R.drawable.ic_sleep_5
+        })
+    }
+}
+
+@BindingAdapter("customerOwed")
+fun TextView.setCustomerOwed(item: Customer?) {
+    item?.let {
+        text = convertNumericQualityToCurrency(item.owed)
+        if (item.owed != "0") {
+            setTextColor(Color.RED)
+        } else {
+            setTextColor(Color.GRAY)
+        }
+    }
+}
+
+@BindingAdapter("customerOwned")
+fun TextView.setCustomerOwned(item: Customer?) {
+    item?.let {
+        text = convertNumericQualityToCurrency(item.owned)
+        if (item.owned != "0") {
+            setTextColor(Color.GREEN)
+        } else {
+            setTextColor(Color.GRAY)
+        }
+    }
+}
+
+
 
 @BindingAdapter("sleepImage")
 fun ImageView.setSleepImage(item: SleepNight?) {
