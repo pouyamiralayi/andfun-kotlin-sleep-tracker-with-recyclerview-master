@@ -7,8 +7,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/gradient_3"
     android:orientation="vertical"
-    android:paddingRight="8dp"
-    android:paddingBottom="8dp"
+    android:padding="16dp"
     android:textDirection="rtl">
 
 
@@ -33,7 +32,6 @@
         android:id="@+id/nameView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corner"
@@ -42,7 +40,6 @@
         android:textDirection="rtl"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/finView"
         tools:text="seller name" />
 
@@ -52,15 +49,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corner"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:textDirection="rtl"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameView"
+        app:layout_constraintTop_toBottomOf="@+id/finView"
         tools:text="seller no" />
 
     <TextView
@@ -84,7 +79,6 @@
         android:id="@+id/pNameView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corner"
@@ -93,9 +87,7 @@
         android:textDirection="rtl"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expireView"
+        app:layout_constraintTop_toBottomOf="@+id/dateView"
         tools:text="product" />
 
     <TextView
@@ -104,16 +96,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corner"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:textDirection="rtl"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.226"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pNameView"
+        app:layout_constraintTop_toBottomOf="@+id/expireView"
         tools:text="product no" />
 
     <TextView
@@ -172,7 +161,6 @@
         android:id="@+id/dateView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corner"
@@ -181,8 +169,6 @@
         android:textDirection="rtl"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descView"
         tools:text="date" />
 
@@ -209,14 +195,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_corner"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:textDirection="rtl"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateView"
+        app:layout_constraintTop_toBottomOf="@+id/descView"
         tools:text="expire" />
 </androidx.constraintlayout.widget.ConstraintLayout>
