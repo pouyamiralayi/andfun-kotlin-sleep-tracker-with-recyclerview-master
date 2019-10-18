@@ -7,45 +7,60 @@ import androidx.lifecycle.ViewModel
 import com.example.android.trackmysleepquality.database.Customer
 import com.example.android.trackmysleepquality.database.Seller
 import com.example.android.trackmysleepquality.network.StrapiApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class DataViewModel : ViewModel() {
 
+    private val apiJob = Job()
+    private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
+
     val customers = MutableLiveData<List<Customer>>()
     val sellers = MutableLiveData<List<Seller>>()
+
+    val fetchError = MutableLiveData<String>()
+
     private val _navigateToCustomerDetail = MutableLiveData<Int>()
     val navigateToCustomerDetail: LiveData<Int>
         get() = _navigateToCustomerDetail
 
 
+    override fun onCleared() {
+        super.onCleared()
+        apiJob.cancel()
+    }
+
     fun getCustomers() {
         /*TODO get customers*/
-//        StrapiApi.retrofitService.getCustomers().enqueue(object: Callback<Customer> {
-//            override fun onFailure(call: Call<Customer>, t: Throwable) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//
-//            override fun onResponse(call: Call<Customer>, response: Response<Customer>) {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//
-//        })
-        customers.value = listOf(
-                Customer(
-                1, "1398","1","1","test name", "2,000","1,000",
-                "1398/1/1","test description","1398/1/1","1398/1/1"),
-                Customer(
-                        2, "1398","2","2","test name 2", "2,000","1,000",
-                        "1398/1/1","test description 2","1398/1/1","1398/1/1"),
-                Customer(
-                        3, "1398","3","3","test name 3", "2,000","1,000",
-                        "1398/1/1","test description 3","1398/1/1","1398/1/1"),
-                Customer(
-                        4, "1398","4","4","test name 4", "2,000","1,000",
-                        "1398/1/1","test description 4","1398/1/1","1398/1/1")
-        )
+        coroutineScope.launch {
+
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers()
+            try {
+                val resultList = getCustomersDeferred.await()
+                customers.value = resultList
+            } catch (t: Throwable) {
+                fetchError.value = t.message
+            }
+        }
+//        customers.value = listOf(
+//                Customer(
+//                        1, "1398", "1", "1", "test name", "2,000", "1,000",
+//                        "1398/1/1", "test description", "1398/1/1", "1398/1/1"),
+//                Customer(
+//                        2, "1398", "2", "2", "test name 2", "2,000", "1,000",
+//                        "1398/1/1", "test description 2", "1398/1/1", "1398/1/1"),
+//                Customer(
+//                        3, "1398", "3", "3", "test name 3", "2,000", "1,000",
+//                        "1398/1/1", "test description 3", "1398/1/1", "1398/1/1"),
+//                Customer(
+//                        4, "1398", "4", "4", "test name 4", "2,000", "1,000",
+//                        "1398/1/1", "test description 4", "1398/1/1", "1398/1/1")
+//        )
     }
 
     fun getSellers() {
@@ -61,7 +76,7 @@ class DataViewModel : ViewModel() {
         _navigateToCustomerDetail.value = customerId
     }
 
-    fun onCustomerNavigated(){
+    fun onCustomerNavigated() {
         _navigateToCustomerDetail.value = null
     }
 

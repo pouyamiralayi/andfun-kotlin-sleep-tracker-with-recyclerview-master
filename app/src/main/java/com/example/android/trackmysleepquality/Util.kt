@@ -78,7 +78,7 @@ fun convertNumericQualityToString(quality: Int, resources: Resources): String {
 
 fun convertNumericQualityToCurrency(quality: String): String {
     /*TODO*/
-    return ""
+    return quality
 }
 
 

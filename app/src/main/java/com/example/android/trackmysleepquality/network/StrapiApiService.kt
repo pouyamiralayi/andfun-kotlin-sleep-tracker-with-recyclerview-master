@@ -2,8 +2,10 @@ package com.example.android.trackmysleepquality.network
 
 import com.example.android.trackmysleepquality.database.Customer
 import com.example.android.trackmysleepquality.database.Seller
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import kotlinx.coroutines.Deferred
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -19,17 +21,18 @@ private val moshi = Moshi.Builder()
 private val retrofit = Retrofit.Builder()
 //        .addConverterFactory(ScalarsConverterFactory.create())
         .addConverterFactory(MoshiConverterFactory.create(moshi))
+        .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .baseUrl(API_URL)
         .build()
 
 interface StrapiApiService {
     @GET("customers")
     fun getCustomers():
-            Call<Customer>
+            Deferred<List<Customer>>
 
     @GET("sellers")
     fun getSellers():
-            Call<Seller>
+            Deferred<List<Seller>>
 }
 
 object StrapiApi {
