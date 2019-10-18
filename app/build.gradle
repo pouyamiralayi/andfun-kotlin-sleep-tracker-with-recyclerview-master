@@ -56,6 +56,7 @@ dependencies {
 
     // Android KTX
     implementation "androidx.core:core-ktx:$version_core"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.41"
 
     // Room and Lifecycle dependencies
     implementation "androidx.room:room-runtime:$version_room"

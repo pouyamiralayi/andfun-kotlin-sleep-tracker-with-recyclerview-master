@@ -35,17 +35,6 @@ class CustomerAdapter(val clickListener: CustomerListener) : ListAdapter<DataIte
             }
         }
     }
-//    fun addHeaderAndSubmitList(list: List<Customer>?) {
-//        adapterScope.launch {
-//            val items = when (list) {
-//                null -> listOf(DataItem.Header)
-//                else -> listOf(DataItem.Header) + list.map DataItem.CustomerItem(it)
-//            }
-//        }
-//        withContext(Dispatchers.Main) {
-//            submitList(items)
-//        }
-//    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){

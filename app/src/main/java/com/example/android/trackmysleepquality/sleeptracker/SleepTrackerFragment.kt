@@ -25,7 +25,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
@@ -45,19 +44,29 @@ class SleepTrackerFragment : Fragment() {
         val application = requireNotNull(this.activity).application
 
 
-        val dataViewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
+        val viewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
 
-        dataViewModel.fetchError.observe(this, Observer { error ->
-            Toast.makeText(context, "$error", Toast.LENGTH_SHORT)
-                    .show()
-        })
+        binding.viewModel = viewModel
 
-        dataViewModel.navigateToCustomerDetail.observe(this, Observer { customerId ->
-            customerId?.let {
-                /*TODO show dialog*/
-                dataViewModel.onCustomerNavigated()
+        viewModel.customersScreen.observe(this, Observer {
+            when(it){
+                true ->  {
+                    binding.customersList.visibility = View.VISIBLE
+                    binding.sellersList.visibility = View.GONE
+                }
+                false -> {
+                    binding.customersList.visibility = View.GONE
+                    binding.sellersList.visibility = View.VISIBLE
+                }
             }
 
+        })
+
+
+
+        viewModel.fetchError.observe(this, Observer { error ->
+            Toast.makeText(context, "$error", Toast.LENGTH_SHORT)
+                    .show()
         })
 
 
@@ -76,7 +85,6 @@ class SleepTrackerFragment : Fragment() {
 //                sleepTrackerViewModel.doneShowingSnackbar()
 //            }
 //        })
-
 
 
         val manager = GridLayoutManager(activity, 3)
@@ -102,21 +110,23 @@ class SleepTrackerFragment : Fragment() {
 //            Toast.makeText(context, "$customerId", Toast.LENGTH_SHORT)
 //                    .show()
         })
-        val adapter2 = SellerAdapter()
+        val adapter2 = SellerAdapter(SellerListener { sellerId ->
+            /*TODO show a dialog of the description*/
+        })
 
 
         binding.customersList.adapter = adapter
         binding.sellersList.adapter = adapter2
 
-        dataViewModel.customers.observe(this, Observer {
+        viewModel.customers.observe(this, Observer {
             it?.let {
                 adapter.addHeaderAndSubmitList(it)
             }
         })
 
-        dataViewModel.sellers.observe(this, Observer {
+        viewModel.sellers.observe(this, Observer {
             it?.let {
-                adapter2.data = it
+                adapter2.addHeaderAndSubmitList(it)
             }
         })
 

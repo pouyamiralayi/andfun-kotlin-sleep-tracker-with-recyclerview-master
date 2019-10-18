@@ -11,7 +11,7 @@ data class Seller(
         @Json(name = "seller_no") var sellerNo: String = "",
         @Json(name = "seller_name") var sellerName: String = "",
         @Json(name = "product_no") var productNo: String = "",
-        @Json(name = "product_name") var product: String = "",
+        var product: String = "",
         @Json(name = "first_unit") var firstUnit: String = "",
         var quantity: String = "",
         var rate: String = "",

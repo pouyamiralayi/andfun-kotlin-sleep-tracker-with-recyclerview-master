@@ -26,6 +26,9 @@
         <variable
             name="viewModel"
             type="com.example.android.trackmysleepquality.datatracker.DataViewModel" />
+        <variable
+            name="View"
+            type="android.view.View" />
     </data>
 
     <!-- Start of the visible fragment layout using ConstraintLayout -->
@@ -34,21 +37,21 @@
         android:layout_height="match_parent"
         android:background="@drawable/rounded_corner"
         tools:context=".sleeptracker.SleepTrackerFragment">
-<!--        <LinearLayout-->
-<!--            android:orientation="vertical"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
-<!--            <ImageView-->
-<!--                android:layout_weight="4"-->
-<!--                app:srcCompat="@drawable/bg_oval"-->
-<!--                android:scaleType="centerCrop"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp" />-->
-<!--            <View-->
-<!--                android:layout_weight="1"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"/>-->
-<!--        </LinearLayout>-->
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_weight="4"
+                app:srcCompat="@drawable/bg_oval"
+                android:scaleType="centerCrop"
+                android:layout_width="match_parent"
+                android:layout_height="0dp" />
+            <View
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"/>
+        </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/customers_list"
             android:layout_width="0dp"
@@ -64,18 +67,17 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:visibility="gone"
             android:id="@+id/sellers_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:layoutDirection="rtl"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/clear_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/stop_button" />
-        <!-- With data binding and LiveData, we can track the buttons' visibility states
-             from the ViewModel. The click handler is in the ViewModel as well, and
-             you can set it for the Views using this lambda pattern. -->
 
         <Button
             android:id="@+id/start_button"
@@ -86,6 +88,7 @@
             android:background="@drawable/rounded_button"
             android:fontFamily="@font/shabnam_medium"
             android:padding="8dp"
+            android:onClick="@{() -> viewModel.navigateToCustomers()}"
             android:text="صورتحساب"
             android:textColor="@android:color/black"
             app:layout_constraintBaseline_toBaselineOf="@id/stop_button"
@@ -96,9 +99,10 @@
         <Button
             android:id="@+id/stop_button"
             style="@style/SleepButtons"
+            android:onClick="@{() -> viewModel.navigateToSellers()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="@dimen/margin"
             android:background="@drawable/rounded_button"
             android:fontFamily="@font/shabnam_medium"
@@ -112,6 +116,7 @@
         <Button
             android:id="@+id/clear_button"
             style="@style/SleepButtons"
+            android:onClick="@{() -> viewModel.reload()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"

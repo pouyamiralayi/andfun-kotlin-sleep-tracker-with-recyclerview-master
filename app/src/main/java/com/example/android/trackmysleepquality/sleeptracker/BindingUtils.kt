@@ -23,6 +23,8 @@ import androidx.databinding.BindingAdapter
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.convertNumericQualityToCurrency
 import com.example.android.trackmysleepquality.database.Customer
+import android.view.View
+import com.example.android.trackmysleepquality.datatracker.DataViewModel
 
 @BindingAdapter("customerImage")
 fun ImageView.setCustomerImage(item: Customer?) {
@@ -42,7 +44,7 @@ fun ImageView.setCustomerImage(item: Customer?) {
 @BindingAdapter("customerOwed")
 fun TextView.setCustomerOwed(item: Customer?) {
     item?.let {
-        text = convertNumericQualityToCurrency(item.owed)
+        text = convertNumericQualityToCurrency("بدهکار: " + item.owed)
         if (item.owed != "0") {
             setTextColor(Color.RED)
         } else {
@@ -54,7 +56,7 @@ fun TextView.setCustomerOwed(item: Customer?) {
 @BindingAdapter("customerOwned")
 fun TextView.setCustomerOwned(item: Customer?) {
     item?.let {
-        text = convertNumericQualityToCurrency(item.owned)
+        text = convertNumericQualityToCurrency("بستانکار: " +item.owned)
         if (item.owned != "0") {
             setTextColor(Color.GREEN)
         } else {

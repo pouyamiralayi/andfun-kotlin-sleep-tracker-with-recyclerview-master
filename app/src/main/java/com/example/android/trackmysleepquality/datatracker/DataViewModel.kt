@@ -21,22 +21,38 @@ class DataViewModel : ViewModel() {
 
     val fetchError = MutableLiveData<String>()
 
-    private val _navigateToCustomerDetail = MutableLiveData<Int>()
-    val navigateToCustomerDetail: LiveData<Int>
-        get() = _navigateToCustomerDetail
-
 
     private val _customersScreen = MutableLiveData<Boolean>()
-    val customersScreen:LiveData<Boolean>
-    get() = _customersScreen
+    val customersScreen: LiveData<Boolean>
+        get() = _customersScreen
+
+    fun reload(){
+        when(_customersScreen.value){
+            true -> fetchCustomers()
+            else -> fetchSellers()
+        }
+    }
+
+    fun navigateToCustomers() {
+        _customersScreen.value = true
+    }
+
+    fun navigateToSellers() {
+        _customersScreen.value = false
+    }
 
     override fun onCleared() {
         super.onCleared()
         apiJob.cancel()
     }
 
-    fun getCustomers() {
-        /*TODO get customers*/
+    init {
+        _customersScreen.value = true
+        fetchCustomers()
+        fetchSellers()
+    }
+
+    fun fetchCustomers() {
         coroutineScope.launch {
 
             val getCustomersDeferred = StrapiApi.retrofitService.getCustomers()
@@ -47,38 +63,22 @@ class DataViewModel : ViewModel() {
                 fetchError.value = t.message
             }
         }
-//        customers.value = listOf(
-//                Customer(
-//                        1, "1398", "1", "1", "test name", "2,000", "1,000",
-//                        "1398/1/1", "test description", "1398/1/1", "1398/1/1"),
-//                Customer(
-//                        2, "1398", "2", "2", "test name 2", "2,000", "1,000",
-//                        "1398/1/1", "test description 2", "1398/1/1", "1398/1/1"),
-//                Customer(
-//                        3, "1398", "3", "3", "test name 3", "2,000", "1,000",
-//                        "1398/1/1", "test description 3", "1398/1/1", "1398/1/1"),
-//                Customer(
-//                        4, "1398", "4", "4", "test name 4", "2,000", "1,000",
-//                        "1398/1/1", "test description 4", "1398/1/1", "1398/1/1")
-//        )
     }
 
-    fun getSellers() {
-        /*TODO get sellers*/
+    fun fetchSellers() {
+        coroutineScope.launch {
+
+            val getCustomersDeferred = StrapiApi.retrofitService.getSellers()
+            try {
+                val resultList = getCustomersDeferred.await()
+                sellers.value = resultList
+            } catch (t: Throwable) {
+                fetchError.value = t.message
+            }
+        }
     }
 
-    init {
-        getCustomers()
-        getSellers()
-    }
 
-    fun onCustomerClick(customerId: Int) {
-        _navigateToCustomerDetail.value = customerId
-    }
-
-    fun onCustomerNavigated() {
-        _navigateToCustomerDetail.value = null
-    }
 
 
     /*TODO*/
