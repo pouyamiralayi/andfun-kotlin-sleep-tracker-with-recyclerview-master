@@ -7,106 +7,118 @@
         <variable
             name="customer"
             type="com.example.android.trackmysleepquality.database.Customer" />
+
+        <variable
+            name="clickListener"
+            type="com.example.android.trackmysleepquality.sleeptracker.CustomerListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/customer_item_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:background="@drawable/gradient_3"
+        android:layoutDirection="ltr"
+        android:onClick="@{() -> clickListener.onClick(customer)}"
         android:orientation="vertical"
-        android:paddingBottom="8dp">
+        android:padding="16dp">
 
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:customerImage="@{customer}"
-            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
             android:id="@+id/finView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:paddingLeft="8dp"
+            android:text="@{customer.finYear}"
+            android:textDirection="rtl"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView"
-            tools:text="@{customer.finYear}" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="32dp"
+            tools:text="fin year" />
 
         <TextView
             android:id="@+id/nameView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:paddingLeft="8dp"
+            android:text="@{customer.customerName}"
+            android:textDirection="rtl"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/finView"
-            tools:text="@{customer.customerName}" />
+            tools:text="name" />
 
         <TextView
             android:id="@+id/noView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="11dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:paddingLeft="8dp"
+            android:text="@{customer.customerNo}"
+            android:textDirection="rtl"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/nameView"
-            tools:text="@{customer.customerNo}" />
+            tools:text="no" />
 
         <TextView
             android:id="@+id/descView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:paddingLeft="8dp"
+            android:text="@{customer.description}"
+            android:textDirection="rtl"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/noView"
-            tools:text="@{customer.description}" />
+            tools:text="desc" />
 
         <TextView
             android:id="@+id/owedView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:paddingLeft="8dp"
+            android:textDirection="rtl"
+            android:textSize="24sp"
+            app:customerOwed="@{customer}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/descView"
-            tools:text="@{customer.owed}" />
+            tools:text="owed" />
 
         <TextView
             android:id="@+id/ownedView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="8dp"
+            android:layoutDirection="rtl"
             android:paddingLeft="8dp"
+            android:textDirection="rtl"
+            android:textSize="24sp"
+            app:customerOwned="@{customer}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/owedView"
-            tools:text="@{customer.owned}" />
+            tools:text="owned" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
