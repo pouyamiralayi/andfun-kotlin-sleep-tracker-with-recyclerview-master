@@ -2,7 +2,6 @@ package com.example.android.trackmysleepquality.datatracker
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.android.trackmysleepquality.database.Customer
 import com.example.android.trackmysleepquality.database.Seller
@@ -11,9 +10,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class DataViewModel : ViewModel() {
 
@@ -29,6 +25,10 @@ class DataViewModel : ViewModel() {
     val navigateToCustomerDetail: LiveData<Int>
         get() = _navigateToCustomerDetail
 
+
+    private val _customersScreen = MutableLiveData<Boolean>()
+    val customersScreen:LiveData<Boolean>
+    get() = _customersScreen
 
     override fun onCleared() {
         super.onCleared()
