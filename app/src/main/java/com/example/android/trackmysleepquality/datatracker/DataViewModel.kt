@@ -122,7 +122,8 @@ class DataViewModel : ViewModel() {
             } catch (t: Throwable) {
                 state.value = ApiState.ERROR
                 customers.value = listOf()
-                fetchError.value = t.message
+                fetchError.value = "خطا!"
+//                fetchError.value = t.message
             }
         }
     }
@@ -138,7 +139,8 @@ class DataViewModel : ViewModel() {
                 sellers.value = resultList
             } catch (t: Throwable) {
                 state.value = ApiState.ERROR
-                fetchError.value = t.message
+                fetchError.value = "خطا!"
+//                fetchError.value = t.message
                 sellers.value = listOf()
             }
         }
