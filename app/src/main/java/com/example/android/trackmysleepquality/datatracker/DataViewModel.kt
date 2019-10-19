@@ -115,7 +115,7 @@ class DataViewModel : ViewModel() {
 
             val getCustomersDeferred = StrapiApi.retrofitService.getCustomers()
             try {
-//                state.value = ApiState.LOADING
+                state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()
                 state.value = ApiState.DONE
                 customers.value = resultList
@@ -133,7 +133,7 @@ class DataViewModel : ViewModel() {
 
             val getCustomersDeferred = StrapiApi.retrofitService.getSellers()
             try {
-//                state.value = ApiState.LOADING
+                state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()
                 state.value = ApiState.DONE
                 sellers.value = resultList
