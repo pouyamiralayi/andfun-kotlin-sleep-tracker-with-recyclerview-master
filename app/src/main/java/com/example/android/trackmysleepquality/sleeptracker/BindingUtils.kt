@@ -25,6 +25,9 @@ import com.example.android.trackmysleepquality.convertNumericQualityToCurrency
 import com.example.android.trackmysleepquality.database.Customer
 import android.view.View
 import com.example.android.trackmysleepquality.datatracker.DataViewModel
+import android.R
+import java.text.SimpleDateFormat
+
 
 @BindingAdapter("customerImage")
 fun ImageView.setCustomerImage(item: Customer?) {
@@ -41,26 +44,44 @@ fun ImageView.setCustomerImage(item: Customer?) {
     }
 }
 
+//@BindingAdapter("customerOwed")
+//fun TextView.setCustomerOwed(textView: TextView, item: Customer?) {
+//    item?.let {
+//        text = "بدهکار: " + textView.context.getString(R.string.display_price, item.owed.toFloat())
+//        if (item.owed != "0") {
+//            setTextColor(Color.RED)
+//        } else {
+//            setTextColor(Color.GRAY)
+//        }
+//    }
+//}
+
 @BindingAdapter("customerOwed")
 fun TextView.setCustomerOwed(item: Customer?) {
     item?.let {
-        text = convertNumericQualityToCurrency("بدهکار: " + item.owed)
-        if (item.owed != "0") {
-            setTextColor(Color.RED)
-        } else {
-            setTextColor(Color.GRAY)
-        }
+        text = "بدهکار: " + String.format("%,.0f", item.owed.toFloat())
+//        if (item.owed != "0") {
+//            setTextColor(Color.RED)
+//        } else {
+//            setTextColor(Color.GRAY)
+//        }
     }
 }
 
 @BindingAdapter("customerOwned")
 fun TextView.setCustomerOwned(item: Customer?) {
     item?.let {
-        text = convertNumericQualityToCurrency("بستانکار: " +item.owned)
-        if (item.owned != "0") {
-            setTextColor(Color.GREEN)
-        } else {
-            setTextColor(Color.GRAY)
-        }
+        text = convertNumericQualityToCurrency("بستانکار: " + String.format("%,.0f", item.owned.toFloat()))
+//        if (item.owned != "0") {
+//            setTextColor(Color.GREEN)
+//        } else {
+//            setTextColor(Color.GRAY)
+//        }
     }
+}
+
+@BindingAdapter("date")
+fun TextView.setDate(date:String){
+    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+
 }
