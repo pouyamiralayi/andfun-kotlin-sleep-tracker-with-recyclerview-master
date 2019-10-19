@@ -25,6 +25,7 @@ import com.example.android.trackmysleepquality.convertNumericQualityToCurrency
 import com.example.android.trackmysleepquality.database.Customer
 import android.view.View
 import com.example.android.trackmysleepquality.database.Seller
+import com.example.android.trackmysleepquality.datatracker.ApiState
 import com.example.android.trackmysleepquality.datatracker.DataViewModel
 import saman.zamani.persiandate.PersianDateFormat
 import java.text.SimpleDateFormat
@@ -92,4 +93,24 @@ fun TextView.setExDate(date: String) {
     val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
     val formatted = persianDateFormat.parseGrg(splitted)
     setText("تاریخ انقضا: " + PersianDateFormat.format(formatted, "l j F Y"))
+}
+
+@BindingAdapter("bindState")
+fun ImageView.setBindState(state: ApiState){
+    when(state){
+        ApiState.LOADING -> {
+            visibility = View.VISIBLE
+            setImageResource(R.drawable.loading_animation)
+        }
+        ApiState.ERROR -> {
+            visibility = View.VISIBLE
+            setImageResource(R.drawable.ic_connection_error)
+        }
+
+        ApiState.DONE -> {
+            visibility = View.GONE
+        }
+
+
+    }
 }

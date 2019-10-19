@@ -124,8 +124,8 @@ class SleepTrackerFragment : Fragment() {
 //        })
 
 
-        val manager = GridLayoutManager(activity, 3)
-        val manager2 = GridLayoutManager(activity, 3)
+//        val manager = GridLayoutManager(activity, 3)
+//        val manager2 = GridLayoutManager(activity, 3)
 //        binding.customersList.layoutManager = manager
 //        binding.sellersList.layoutManager = manager2
 

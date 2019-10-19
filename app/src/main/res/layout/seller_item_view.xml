@@ -68,7 +68,7 @@
             android:text="@{@string/productName +` `+seller.product}"
             android:textDirection="rtl"
             android:textSize="24sp"
-            android:textColor="@color/colorAmber_900"
+            android:textColor="#34e89e"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dateView"

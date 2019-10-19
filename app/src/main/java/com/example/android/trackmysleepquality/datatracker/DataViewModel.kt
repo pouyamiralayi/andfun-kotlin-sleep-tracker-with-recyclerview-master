@@ -11,7 +11,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
+enum class ApiState { LOADING, ERROR, DONE }
 class DataViewModel : ViewModel() {
+
+
+    val state = MutableLiveData<ApiState>()
 
     private val apiJob = Job()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
@@ -23,7 +27,7 @@ class DataViewModel : ViewModel() {
 
     val queryNotFound = MutableLiveData<Boolean>()
 
-    fun onQueryNotFoundCompleted(){
+    fun onQueryNotFoundCompleted() {
         queryNotFound.value = false
     }
 
@@ -37,7 +41,6 @@ class DataViewModel : ViewModel() {
             else -> fetchSellers()
         }
     }
-
 
 
     fun navigateToCustomers() {
@@ -65,14 +68,13 @@ class DataViewModel : ViewModel() {
                         it.rate.toLowerCase().contains(query) ||
                         it.firstUnit.toLowerCase().contains(query) ||
                         it.quantity.toLowerCase().contains(query)
-                        ){
+                ) {
                     temp.add(it)
                 }
             }
-            if(temp.size > 0){
+            if (temp.size > 0) {
                 sellers.postValue(temp)
-            }
-            else {
+            } else {
                 queryNotFound.postValue(true)
             }
         }
@@ -83,14 +85,13 @@ class DataViewModel : ViewModel() {
             val temp = mutableListOf<Customer>()
             customers.value?.forEach {
                 if (it.description.toLowerCase().contains(query)
-                ){
+                ) {
                     temp.add(it)
                 }
             }
-            if(temp.size > 0){
+            if (temp.size > 0) {
                 customers.postValue(temp)
-            }
-            else {
+            } else {
                 queryNotFound.postValue(true)
             }
         }
@@ -102,6 +103,7 @@ class DataViewModel : ViewModel() {
     }
 
     init {
+        state.value = ApiState.LOADING
         queryNotFound.value = false
         _customersScreen.value = true
         fetchCustomers()
@@ -113,9 +115,13 @@ class DataViewModel : ViewModel() {
 
             val getCustomersDeferred = StrapiApi.retrofitService.getCustomers()
             try {
+//                state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()
+                state.value = ApiState.DONE
                 customers.value = resultList
             } catch (t: Throwable) {
+                state.value = ApiState.ERROR
+                customers.value = listOf()
                 fetchError.value = t.message
             }
         }
@@ -126,10 +132,14 @@ class DataViewModel : ViewModel() {
 
             val getCustomersDeferred = StrapiApi.retrofitService.getSellers()
             try {
+//                state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()
+                state.value = ApiState.DONE
                 sellers.value = resultList
             } catch (t: Throwable) {
+                state.value = ApiState.ERROR
                 fetchError.value = t.message
+                sellers.value = listOf()
             }
         }
     }
