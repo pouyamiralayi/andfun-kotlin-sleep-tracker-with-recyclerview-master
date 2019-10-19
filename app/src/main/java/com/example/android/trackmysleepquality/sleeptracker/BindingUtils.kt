@@ -62,21 +62,21 @@ fun ImageView.setCustomerImage(item: Customer?) {
 @BindingAdapter("customerOwed")
 fun TextView.setCustomerOwed(item: Customer?) {
     item?.let {
-        text = "بدهکار: " + String.format("%,.0f", item.owed.toFloat())
+        text = "بدهکار: " + String.format("%,.0f", item.owed.toDouble())
     }
 }
 
 @BindingAdapter("customerOwned")
 fun TextView.setCustomerOwned(item: Customer?) {
     item?.let {
-        text = "بستانکار: " + String.format("%,.0f", item.owned.toFloat())
+        text = "بستانکار: " + String.format("%,.0f", item.owned.toDouble())
     }
 }
 
 @BindingAdapter("payment")
 fun TextView.setSellerPayment(item: Seller?) {
     item?.let {
-        text = "پرداختی: " + String.format("%,.0f", item.payment.toFloat())
+        text = "پرداختی: " + String.format("%,.0f", item.payment.toDouble())
     }
 }
 

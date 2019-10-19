@@ -116,16 +116,16 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
         owed.addSource(customers) {
             coroutineScope.launch {
                 customers.value?.let {
-                    val res = it.map { it.owed.toFloat() }.sum()
-                    owed.postValue(String.format("%,.0f", res.toFloat()))
+                    val res = it.map { it.owed.toDouble() }.sum()
+                    owed.postValue(String.format("%,.0f", res.toDouble()))
                 }
             }
         }
         owned.addSource(customers) {
             coroutineScope.launch {
                 customers.value?.let {
-                    val res = it.map { it.owned.toFloat() }.sum()
-                    owned.postValue(String.format("%,.0f", res.toFloat()))
+                    val res = it.map { it.owned.toDouble() }.sum()
+                    owned.postValue(String.format("%,.0f", res.toDouble()))
                 }
             }
         }
