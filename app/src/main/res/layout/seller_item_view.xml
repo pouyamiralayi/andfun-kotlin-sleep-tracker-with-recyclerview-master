@@ -185,7 +185,7 @@
             android:fontFamily="@font/shabnam_medium"
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
-            android:textColor="@{seller.payment.equals(`0`) ? @color/gray_text_color : @color/colorAmber_A400}"
+            android:textColor="@{seller.payment.equals(`0`) ? @color/gray_text_color : @color/colorGreen_A400}"
             android:textDirection="rtl"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"

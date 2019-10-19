@@ -115,7 +115,7 @@
             android:layoutDirection="rtl"
             android:paddingRight="8dp"
             android:textAlignment="center"
-            android:textColor="@{customer.owned.equals(`0`) ? @color/gray_text_color : @color/colorPrimary}"
+            android:textColor="@{customer.owned.equals(`0`) ? @color/gray_text_color : @color/colorGreen_A400}"
             android:textDirection="rtl"
             android:textSize="24sp"
             app:customerOwned="@{customer}"
