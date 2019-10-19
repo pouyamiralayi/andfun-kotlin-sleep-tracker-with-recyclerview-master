@@ -56,6 +56,24 @@ class SleepTrackerFragment : Fragment() {
             }
         }
 
+        binding.up.setOnClickListener{
+            viewModel.customersScreen.value?.let {
+                when(it){
+                    true -> binding.customersList.scrollToPosition(0)
+                    else -> binding.sellersList.scrollToPosition(0)
+                }
+            }
+        }
+
+        binding.down.setOnClickListener{
+            viewModel.customersScreen.value?.let {
+                when(it){
+                    true -> binding.customersList.scrollToPosition(viewModel.customers.value?.size?.minus(1) ?: 0)
+                    else -> binding.sellersList.scrollToPosition(viewModel.sellers.value?.size?.minus(1) ?: 0)
+                }
+            }
+        }
+
         viewModel.customersScreen.observe(this, Observer {
             when(it){
                 true ->  {
