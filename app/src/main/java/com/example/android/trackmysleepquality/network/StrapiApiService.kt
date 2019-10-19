@@ -1,6 +1,7 @@
 package com.example.android.trackmysleepquality.network
 
 import com.example.android.trackmysleepquality.database.Customer
+import com.example.android.trackmysleepquality.database.LoginResp
 import com.example.android.trackmysleepquality.database.Seller
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
@@ -10,8 +11,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
+import retrofit2.http.*
 
 private const val API_URL = "http://10.30.205.75:1339"
 
@@ -29,13 +29,18 @@ private val retrofit = Retrofit.Builder()
 interface StrapiApiService {
     @GET("customers")
     fun getCustomers():
-//    fun getCustomers(@Query("customer_no") type: String):
+//    fun getCustomers(@Query("customer_no") customer_no: String):
             Deferred<List<Customer>>
 
     @GET("sellers")
     fun getSellers():
-//    fun getSellers(@Query("seller_no") type: String):
+//    fun getSellers(@Query("seller_no") seller_no: String):
             Deferred<List<Seller>>
+
+    @POST("auth/local")
+    @FormUrlEncoded
+    fun login(@Field("identifier") identifier: String, @Field("password") password: String):
+        Deferred<LoginResp>
 }
 
 object StrapiApi {

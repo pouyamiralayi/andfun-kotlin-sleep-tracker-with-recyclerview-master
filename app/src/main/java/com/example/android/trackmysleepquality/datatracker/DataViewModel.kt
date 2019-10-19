@@ -12,8 +12,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 enum class ApiState { LOADING, ERROR, DONE }
-class DataViewModel : ViewModel() {
+class DataViewModel(val customer_name: String, val customer_no: String) : ViewModel() {
 
+    val customerName = MutableLiveData<String>()
+    val customerNo = MutableLiveData<String>()
 
     val state = MutableLiveData<ApiState>()
 
@@ -106,6 +108,8 @@ class DataViewModel : ViewModel() {
         state.value = ApiState.LOADING
         queryNotFound.value = false
         _customersScreen.value = true
+        customerName.value = customer_name
+        customerNo.value = customer_no
         fetchCustomers()
         fetchSellers()
     }

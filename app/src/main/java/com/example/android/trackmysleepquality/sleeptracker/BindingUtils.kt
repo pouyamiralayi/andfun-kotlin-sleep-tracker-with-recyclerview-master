@@ -24,6 +24,7 @@ import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.convertNumericQualityToCurrency
 import com.example.android.trackmysleepquality.database.Customer
 import android.view.View
+import android.widget.Toast
 import com.example.android.trackmysleepquality.database.Seller
 import com.example.android.trackmysleepquality.datatracker.ApiState
 import com.example.android.trackmysleepquality.datatracker.DataViewModel
@@ -112,5 +113,22 @@ fun ImageView.setBindState(state: ApiState){
         }
 
 
+    }
+}
+
+@BindingAdapter("bindStateLogin")
+fun ImageView.setBindStateLogin(state: ApiState){
+    when(state){
+        ApiState.LOADING -> {
+            visibility = View.VISIBLE
+            setImageResource(R.drawable.loading_animation)
+        }
+        ApiState.ERROR -> {
+            visibility = View.GONE
+        }
+
+        ApiState.DONE -> {
+            visibility = View.GONE
+        }
     }
 }
