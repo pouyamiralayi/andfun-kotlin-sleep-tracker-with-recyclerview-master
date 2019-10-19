@@ -41,6 +41,21 @@ class DataViewModel : ViewModel() {
         _customersScreen.value = false
     }
 
+    fun query(query:String){
+        when(_customersScreen.value){
+            true -> searchCustomers(query)
+            else -> searchSellers(query)
+        }
+    }
+
+    private fun searchSellers(query: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    private fun searchCustomers(query: String) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onCleared() {
         super.onCleared()
         apiJob.cancel()

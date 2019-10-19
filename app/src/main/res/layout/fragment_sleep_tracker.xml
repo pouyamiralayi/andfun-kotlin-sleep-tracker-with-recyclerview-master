@@ -63,7 +63,7 @@
             app:layout_constraintBottom_toTopOf="@+id/clear_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stop_button" />
+            app:layout_constraintTop_toBottomOf="@+id/editText" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -76,8 +76,11 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/clear_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stop_button" />
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/editText"
+            />
 
         <Button
             android:id="@+id/start_button"
@@ -87,8 +90,8 @@
             android:layout_marginStart="@dimen/margin"
             android:background="@drawable/rounded_button"
             android:fontFamily="@font/shabnam_medium"
-            android:padding="8dp"
             android:onClick="@{() -> viewModel.navigateToCustomers()}"
+            android:padding="8dp"
             android:text="صورتحساب"
             android:textColor="@android:color/black"
             app:layout_constraintBaseline_toBaselineOf="@id/stop_button"
@@ -99,13 +102,13 @@
         <Button
             android:id="@+id/stop_button"
             style="@style/SleepButtons"
-            android:onClick="@{() -> viewModel.navigateToSellers()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="48dp"
             android:layout_marginEnd="@dimen/margin"
             android:background="@drawable/rounded_button"
             android:fontFamily="@font/shabnam_medium"
+            android:onClick="@{() -> viewModel.navigateToSellers()}"
             android:padding="8dp"
             android:text="گزارش فروش"
             android:textColor="@android:color/black"
@@ -129,6 +132,35 @@
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="278dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/rounded_corner"
+            android:ems="10"
+            android:fontFamily="@font/shabnam_medium"
+            android:hint="جستجو نمایید"
+            android:inputType="textPersonName"
+            android:padding="8dp"
+            android:textColor="@color/white_text_color"
+            android:textColorHint="#eee"
+            android:textDirection="rtl"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stop_button"
+            tools:text="Name" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/shabnam_medium"
+            android:text="جستجو"
+            app:layout_constraintBaseline_toBaselineOf="@+id/editText"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

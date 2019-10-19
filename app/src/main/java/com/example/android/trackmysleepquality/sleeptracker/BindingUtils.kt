@@ -24,8 +24,9 @@ import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.convertNumericQualityToCurrency
 import com.example.android.trackmysleepquality.database.Customer
 import android.view.View
+import com.example.android.trackmysleepquality.database.Seller
 import com.example.android.trackmysleepquality.datatracker.DataViewModel
-import android.R
+import saman.zamani.persiandate.PersianDateFormat
 import java.text.SimpleDateFormat
 
 
@@ -60,28 +61,35 @@ fun ImageView.setCustomerImage(item: Customer?) {
 fun TextView.setCustomerOwed(item: Customer?) {
     item?.let {
         text = "بدهکار: " + String.format("%,.0f", item.owed.toFloat())
-//        if (item.owed != "0") {
-//            setTextColor(Color.RED)
-//        } else {
-//            setTextColor(Color.GRAY)
-//        }
     }
 }
 
 @BindingAdapter("customerOwned")
 fun TextView.setCustomerOwned(item: Customer?) {
     item?.let {
-        text = convertNumericQualityToCurrency("بستانکار: " + String.format("%,.0f", item.owned.toFloat()))
-//        if (item.owned != "0") {
-//            setTextColor(Color.GREEN)
-//        } else {
-//            setTextColor(Color.GRAY)
-//        }
+        text = "بستانکار: " + String.format("%,.0f", item.owned.toFloat())
+    }
+}
+
+@BindingAdapter("payment")
+fun TextView.setSellerPayment(item: Seller?) {
+    item?.let {
+        text = "پرداختی: " + String.format("%,.0f", item.payment.toFloat())
     }
 }
 
 @BindingAdapter("date")
-fun TextView.setDate(date:String){
-    val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+fun TextView.setDate(date: String) {
+    val splitted = date.split('T')[0]
+    val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
+    val formatted = persianDateFormat.parseGrg(splitted)
+    setText("تاریخ: " + PersianDateFormat.format(formatted, "l j F Y"))
+}
 
+@BindingAdapter("exdate")
+fun TextView.setExDate(date: String) {
+    val splitted = date.split('T')[0]
+    val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
+    val formatted = persianDateFormat.parseGrg(splitted)
+    setText("تاریخ انقضا: " + PersianDateFormat.format(formatted, "l j F Y"))
 }
