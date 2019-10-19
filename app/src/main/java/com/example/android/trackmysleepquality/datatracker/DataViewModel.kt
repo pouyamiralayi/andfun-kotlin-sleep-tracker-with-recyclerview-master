@@ -21,17 +21,24 @@ class DataViewModel : ViewModel() {
 
     val fetchError = MutableLiveData<String>()
 
+    val queryNotFound = MutableLiveData<Boolean>()
+
+    fun onQueryNotFoundCompleted(){
+        queryNotFound.value = false
+    }
 
     private val _customersScreen = MutableLiveData<Boolean>()
     val customersScreen: LiveData<Boolean>
         get() = _customersScreen
 
-    fun reload(){
-        when(_customersScreen.value){
+    fun reload() {
+        when (_customersScreen.value) {
             true -> fetchCustomers()
             else -> fetchSellers()
         }
     }
+
+
 
     fun navigateToCustomers() {
         _customersScreen.value = true
@@ -41,19 +48,52 @@ class DataViewModel : ViewModel() {
         _customersScreen.value = false
     }
 
-    fun query(query:String){
-        when(_customersScreen.value){
+    fun query(query: String) {
+        when (_customersScreen.value) {
             true -> searchCustomers(query)
             else -> searchSellers(query)
         }
     }
 
     private fun searchSellers(query: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        coroutineScope.launch {
+            val temp = mutableListOf<Seller>()
+            sellers.value?.forEach {
+                if (it.product.toLowerCase().contains(query) ||
+                        it.productNo.toLowerCase().contains(query) ||
+                        it.description.toLowerCase().contains(query) ||
+                        it.rate.toLowerCase().contains(query) ||
+                        it.firstUnit.toLowerCase().contains(query) ||
+                        it.quantity.toLowerCase().contains(query)
+                        ){
+                    temp.add(it)
+                }
+            }
+            if(temp.size > 0){
+                sellers.postValue(temp)
+            }
+            else {
+                queryNotFound.postValue(true)
+            }
+        }
     }
 
     private fun searchCustomers(query: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        coroutineScope.launch {
+            val temp = mutableListOf<Customer>()
+            customers.value?.forEach {
+                if (it.description.toLowerCase().contains(query)
+                ){
+                    temp.add(it)
+                }
+            }
+            if(temp.size > 0){
+                customers.postValue(temp)
+            }
+            else {
+                queryNotFound.postValue(true)
+            }
+        }
     }
 
     override fun onCleared() {
@@ -62,6 +102,7 @@ class DataViewModel : ViewModel() {
     }
 
     init {
+        queryNotFound.value = false
         _customersScreen.value = true
         fetchCustomers()
         fetchSellers()
@@ -92,8 +133,6 @@ class DataViewModel : ViewModel() {
             }
         }
     }
-
-
 
 
     /*TODO*/

@@ -15,12 +15,15 @@
  */
 
 package com.example.android.trackmysleepquality
-
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.res.Resources
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+
 
 /**
  * These functions create a formatted string that can be set in a TextView.
@@ -98,3 +101,13 @@ fun convertLongToDateString(systemTime: Long): String {
 }
 
 
+fun hideKeyboard(activity: Activity) {
+    val imm = activity.getSystemService(Activity.INPUT_METHOD_SERVICE)
+    //Find the currently focused view, so we can grab the correct window token from it.
+    var view = activity.currentFocus
+    //If no view currently has focus, create a new one, just so we can grab a window token from it
+    if (view == null) {
+        view = View(activity)
+    }
+    (imm as InputMethodManager).hideSoftInputFromWindow(view!!.windowToken, 0)
+}

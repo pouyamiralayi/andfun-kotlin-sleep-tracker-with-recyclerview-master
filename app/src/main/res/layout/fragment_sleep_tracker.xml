@@ -63,7 +63,7 @@
             app:layout_constraintBottom_toTopOf="@+id/clear_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText" />
+            app:layout_constraintTop_toBottomOf="@+id/query" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -79,7 +79,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintTop_toBottomOf="@+id/editText"
+            app:layout_constraintTop_toBottomOf="@+id/query"
             />
 
         <Button
@@ -135,7 +135,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/query"
             android:layout_width="278dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -154,13 +154,13 @@
             tools:text="Name" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/shabnam_medium"
             android:text="جستجو"
-            app:layout_constraintBaseline_toBaselineOf="@+id/editText"
+            app:layout_constraintBaseline_toBaselineOf="@+id/query"
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

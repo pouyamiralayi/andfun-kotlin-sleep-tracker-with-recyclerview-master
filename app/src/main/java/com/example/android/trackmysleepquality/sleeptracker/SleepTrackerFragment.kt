@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
 import com.example.android.trackmysleepquality.datatracker.DataViewModel
+import com.example.android.trackmysleepquality.hideKeyboard
 
 class SleepTrackerFragment : Fragment() {
 
@@ -48,6 +49,13 @@ class SleepTrackerFragment : Fragment() {
 
         binding.viewModel = viewModel
 
+        binding.search.setOnClickListener{
+            hideKeyboard(activity!!)
+            binding.query.text?.let{
+                viewModel.query(it.toString())
+            }
+        }
+
         viewModel.customersScreen.observe(this, Observer {
             when(it){
                 true ->  {
@@ -62,13 +70,24 @@ class SleepTrackerFragment : Fragment() {
 
         })
 
+        viewModel.queryNotFound.observe(this, Observer {
+            when(it){
+                true -> {
+                    Toast.makeText(context, "داده ای یافت نشد.", Toast.LENGTH_SHORT)
+                        .show()
+                    viewModel.onQueryNotFoundCompleted()
+                }
+                else -> null
+            }
+
+        })
+
 
 
         viewModel.fetchError.observe(this, Observer { error ->
             Toast.makeText(context, "$error", Toast.LENGTH_SHORT)
                     .show()
         })
-
 
 
         // Add an Observer on the state variable for showing a Snackbar message
