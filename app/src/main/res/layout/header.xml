@@ -1,8 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceLarge"
-    android:text="@string/header_text"
-    android:padding="8dp" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable name="customerName" type="String"/>
+        <variable name="customerNo" type="String"/>
+        <variable name="customerOwed" type="String"/>
+        <variable name="customerOwned" type="String"/>
+    </data>
+
+    <LinearLayout
+        android:id="@+id/header"
+        android:layout_margin="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_text_color"
+            android:fontFamily="@font/shabnam_medium"
+            android:textDirection="rtl"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@{customerName}"
+            android:padding="8dp" />
+        <TextView
+            android:id="@+id/no"
+            android:textColor="@color/white_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/shabnam_medium"
+            android:textDirection="rtl"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@{customerNo}"
+            android:padding="8dp" />
+        <TextView
+            android:id="@+id/owed"
+            android:textColor="@color/white_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/shabnam_medium"
+            android:textDirection="rtl"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@{customerOwed}"
+            android:padding="8dp" />
+        <TextView
+            android:id="@+id/owned"
+            android:textColor="@color/white_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/shabnam_medium"
+            android:textDirection="rtl"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@{customerOwned}"
+            android:padding="8dp" />
+    </LinearLayout>
+</layout>

@@ -2,19 +2,17 @@ package com.example.android.trackmysleepquality.sleeptracker
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.database.Customer
 import com.example.android.trackmysleepquality.databinding.CustomerItemViewBinding
+import com.example.android.trackmysleepquality.databinding.HeaderBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.ClassCastException
 
 private const val ITEM_VIEW_HEADER = 0
 private const val ITEM_VIEW_ITEM = 1
@@ -24,29 +22,34 @@ class CustomerAdapter(val clickListener: CustomerListener) : ListAdapter<DataIte
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    fun addHeaderAndSubmitList(list: List<Customer>){
+    fun addHeaderAndSubmitList(list: List<Customer>, customerName: String, customerNo:String, owed: String, owned: String) {
         adapterScope.launch {
-            val items = when(list){
-                null -> listOf(DataItem.Header)
-                else -> listOf(DataItem.Header) + list.map { DataItem.CustomerItem(it) }
+            val items = when (list) {
+                null -> listOf(DataItem.Header(customerName, customerNo, owed, owned))
+                else -> listOf(DataItem.Header(customerName, customerNo, owed, owned)) + list.map { DataItem.CustomerItem(it) }
             }
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 submitList(items)
             }
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when(holder){
+        when (holder) {
             is ViewHolder -> {
                 val customerItem = getItem(position) as DataItem.CustomerItem
                 holder.bind(customerItem.customer, clickListener)
+            }
+            is TextViewHolder -> {
+                val headerItem = getItem(position) as DataItem.Header
+                holder.bind(headerItem.customerName, headerItem.customerNo,headerItem.owed, headerItem.owned)
+
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
+        return when (viewType) {
             ITEM_VIEW_HEADER -> TextViewHolder.from(parent)
             ITEM_VIEW_ITEM -> ViewHolder.from(parent)
             else -> throw ClassCastException("unknown view type $viewType")
@@ -77,12 +80,19 @@ class CustomerAdapter(val clickListener: CustomerListener) : ListAdapter<DataIte
         }
     }
 
-    class TextViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    class TextViewHolder private constructor(val binding: HeaderBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(customerName: String, customerNo: String, owed: String, owned: String) {
+            binding.customerName = customerName
+            binding.customerNo = customerNo
+            binding.customerOwed = owed
+            binding.customerOwned = owned
+        }
+
         companion object {
             fun from(parent: ViewGroup): TextViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.header, parent, false)
-                return TextViewHolder(view)
+                val binding = HeaderBinding.inflate(layoutInflater, parent, false)
+                return TextViewHolder(binding)
             }
         }
     }
@@ -108,10 +118,12 @@ class CustomerListener(val clickListener: (customerId: Int) -> Unit) {
 
 sealed class DataItem {
     abstract val id: Int
-    data class CustomerItem(val customer: Customer) : DataItem(){
+
+    data class CustomerItem(val customer: Customer) : DataItem() {
         override val id = customer.id
     }
-    object Header: DataItem(){
+
+    data class Header(val customerName: String, val customerNo: String, val owed: String, val owned: String) : DataItem() {
         override val id = Int.MIN_VALUE
     }
 }

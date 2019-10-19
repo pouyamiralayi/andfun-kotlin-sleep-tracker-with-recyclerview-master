@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.android.trackmysleepquality.R
 import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
 import com.example.android.trackmysleepquality.datatracker.DataViewModel
+import com.example.android.trackmysleepquality.datatracker.DataViewModelFactory
 import com.example.android.trackmysleepquality.hideKeyboard
 
 class SleepTrackerFragment : Fragment() {
@@ -44,39 +45,47 @@ class SleepTrackerFragment : Fragment() {
 
         val application = requireNotNull(this.activity).application
 
-
-        val viewModel = ViewModelProviders.of(this).get(DataViewModel::class.java)
+        val args = arguments?.let {
+            SleepTrackerFragmentArgs.fromBundle(it)
+        }
+        val viewModelFactory = DataViewModelFactory(args?.customerName ?: "", args?.customerNo
+                ?: "")
+        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DataViewModel::class.java)
 
         binding.viewModel = viewModel
 
-        binding.search.setOnClickListener{
+
+
+        binding.search.setOnClickListener {
             hideKeyboard(activity!!)
-            binding.query.text?.let{
+            binding.query.text?.let {
                 viewModel.query(it.toString())
             }
         }
 
-        binding.up.setOnClickListener{
+        binding.up.setOnClickListener {
             viewModel.customersScreen.value?.let {
-                when(it){
+                when (it) {
                     true -> binding.customersList.scrollToPosition(0)
                     else -> binding.sellersList.scrollToPosition(0)
                 }
             }
         }
 
-        binding.down.setOnClickListener{
+        binding.down.setOnClickListener {
             viewModel.customersScreen.value?.let {
-                when(it){
-                    true -> binding.customersList.scrollToPosition(viewModel.customers.value?.size?.minus(1) ?: 0)
-                    else -> binding.sellersList.scrollToPosition(viewModel.sellers.value?.size?.minus(1) ?: 0)
+                when (it) {
+                    true -> binding.customersList.scrollToPosition(viewModel.customers.value?.size?.minus(1)
+                            ?: 0)
+                    else -> binding.sellersList.scrollToPosition(viewModel.sellers.value?.size?.minus(1)
+                            ?: 0)
                 }
             }
         }
 
         viewModel.customersScreen.observe(this, Observer {
-            when(it){
-                true ->  {
+            when (it) {
+                true -> {
                     binding.customersList.visibility = View.VISIBLE
                     binding.sellersList.visibility = View.GONE
                 }
@@ -89,10 +98,10 @@ class SleepTrackerFragment : Fragment() {
         })
 
         viewModel.queryNotFound.observe(this, Observer {
-            when(it){
+            when (it) {
                 true -> {
                     Toast.makeText(context, "داده ای یافت نشد.", Toast.LENGTH_SHORT)
-                        .show()
+                            .show()
                     viewModel.onQueryNotFoundCompleted()
                 }
                 else -> null
@@ -157,13 +166,33 @@ class SleepTrackerFragment : Fragment() {
 
         viewModel.customers.observe(this, Observer {
             it?.let {
-                adapter.addHeaderAndSubmitList(it)
+                adapter.addHeaderAndSubmitList(it, viewModel.customerName.value
+                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
+                        ?: "", viewModel.owned.value.toString() ?: "")
             }
         })
 
+        viewModel.owed.observe(this, Observer {
+            it?.let {
+                adapter.addHeaderAndSubmitList(viewModel.customers.value ?: listOf(), viewModel.customerName.value
+                        ?: "", viewModel.customerNo.value ?: "", it.toString()
+                        ?: "", viewModel.owned.value.toString() ?: "")
+            }
+        })
+
+        viewModel.owned.observe(this, Observer {
+            it?.let {
+                adapter.addHeaderAndSubmitList(viewModel.customers.value ?: listOf(), viewModel.customerName.value
+                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
+                        ?: "", it.toString() ?: "")
+            }
+        })
+
+
         viewModel.sellers.observe(this, Observer {
             it?.let {
-                adapter2.addHeaderAndSubmitList(it)
+                adapter2.addHeaderAndSubmitList(it, viewModel.customerName.value
+                        ?: "", viewModel.customerNo.value ?: "", "", "")
             }
         })
 

@@ -28,13 +28,11 @@ private val retrofit = Retrofit.Builder()
 
 interface StrapiApiService {
     @GET("customers")
-    fun getCustomers():
-//    fun getCustomers(@Query("customer_no") customer_no: String):
+    fun getCustomers(@Query("customer_no") customer_no: String):
             Deferred<List<Customer>>
 
     @GET("sellers")
-    fun getSellers():
-//    fun getSellers(@Query("seller_no") seller_no: String):
+    fun getSellers(@Query("seller_no") seller_no: String):
             Deferred<List<Seller>>
 
     @POST("auth/local")

@@ -1,8 +1,6 @@
 package com.example.android.trackmysleepquality.datatracker
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.example.android.trackmysleepquality.database.Customer
 import com.example.android.trackmysleepquality.database.Seller
 import com.example.android.trackmysleepquality.network.StrapiApi
@@ -24,6 +22,10 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
 
     val customers = MutableLiveData<List<Customer>>()
     val sellers = MutableLiveData<List<Seller>>()
+
+    val owed = MediatorLiveData<String>()
+    val owned = MediatorLiveData<String>()
+
 
     val fetchError = MutableLiveData<String>()
 
@@ -110,6 +112,23 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
         _customersScreen.value = true
         customerName.value = customer_name
         customerNo.value = customer_no
+
+        owed.addSource(customers) {
+            coroutineScope.launch {
+                customers.value?.let {
+                    val res = it.map { it.owed.toFloat() }.sum()
+                    owed.postValue(String.format("%,.0f", res.toFloat()))
+                }
+            }
+        }
+        owned.addSource(customers) {
+            coroutineScope.launch {
+                customers.value?.let {
+                    val res = it.map { it.owned.toFloat() }.sum()
+                    owned.postValue(String.format("%,.0f", res.toFloat()))
+                }
+            }
+        }
         fetchCustomers()
         fetchSellers()
     }
@@ -117,7 +136,8 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
     fun fetchCustomers() {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers()
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers(customerNo.value
+                    ?: "")
             try {
                 state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()
@@ -135,7 +155,7 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
     fun fetchSellers() {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getSellers()
+            val getCustomersDeferred = StrapiApi.retrofitService.getSellers(customerNo.value ?: "")
             try {
                 state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()

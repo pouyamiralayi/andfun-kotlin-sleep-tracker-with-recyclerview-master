@@ -2,20 +2,17 @@ package com.example.android.trackmysleepquality.sleeptracker
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackmysleepquality.R
-import com.example.android.trackmysleepquality.database.Customer
 import com.example.android.trackmysleepquality.database.Seller
+import com.example.android.trackmysleepquality.databinding.HeaderBinding
 import com.example.android.trackmysleepquality.databinding.SellerItemViewBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.lang.ClassCastException
 
 private const val ITEM_VIEW_HEADER = 0
 private const val ITEM_VIEW_ITEM = 1
@@ -25,11 +22,11 @@ class SellerAdapter(val clickListener: SellerListener) : ListAdapter<DataItemSel
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    fun addHeaderAndSubmitList(list: List<Seller>) {
+    fun addHeaderAndSubmitList(list: List<Seller>, customerName: String, customerNo: String, owed: String, owned: String) {
         adapterScope.launch {
             val items = when (list) {
-                null -> listOf(DataItemSeller.Header)
-                else -> listOf(DataItemSeller.Header) + list.map { DataItemSeller.SellerItem(it) }
+                null -> listOf(DataItemSeller.Header(customerName, customerNo, owed, owned))
+                else -> listOf(DataItemSeller.Header(customerName, customerNo, owed, owned)) + list.map { DataItemSeller.SellerItem(it) }
             }
             withContext(Dispatchers.Main) {
                 submitList(items)
@@ -42,6 +39,11 @@ class SellerAdapter(val clickListener: SellerListener) : ListAdapter<DataItemSel
             is ViewHolder -> {
                 val sellerItem = getItem(position) as DataItemSeller.SellerItem
                 holder.bind(sellerItem.seller, clickListener)
+            }
+            is TextViewHolder -> {
+                val headerItem = getItem(position) as DataItemSeller.Header
+                holder.bind(headerItem.customerName, headerItem.customerNo, headerItem.owed, headerItem.owned)
+
             }
         }
     }
@@ -78,12 +80,19 @@ class SellerAdapter(val clickListener: SellerListener) : ListAdapter<DataItemSel
         }
     }
 
-    class TextViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class TextViewHolder private constructor(val binding: HeaderBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(customerName: String, customerNo: String, owed: String, owned: String) {
+            binding.customerName = customerName
+            binding.customerNo = customerNo
+            binding.customerOwed = owed
+            binding.customerOwned = owned
+        }
+
         companion object {
             fun from(parent: ViewGroup): TextViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val view = layoutInflater.inflate(R.layout.header, parent, false)
-                return TextViewHolder(view)
+                val binding = HeaderBinding.inflate(layoutInflater, parent, false)
+                return TextViewHolder(binding)
             }
         }
     }
@@ -114,7 +123,7 @@ sealed class DataItemSeller {
         override val id = seller.id
     }
 
-    object Header : DataItemSeller() {
+    data class Header(val customerName: String, val customerNo: String, val owed: String, val owned: String) : DataItemSeller() {
         override val id = Int.MIN_VALUE
     }
 }

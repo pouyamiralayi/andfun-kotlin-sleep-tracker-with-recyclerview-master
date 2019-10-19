@@ -24,7 +24,8 @@ class LoginFragment : Fragment(){
         viewModel.navigateToCustomers.observe(this, Observer {
             it?.let{
                 if(it){
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToSleepTrackerFragment())
+                    findNavController()
+                            .navigate(LoginFragmentDirections.actionLoginFragmentToSleepTrackerFragment(viewModel.customer_name.value ?: "", viewModel.username.value ?: ""))
                     viewModel.onNavigateToCustomersCompleted()
                 }
             }
