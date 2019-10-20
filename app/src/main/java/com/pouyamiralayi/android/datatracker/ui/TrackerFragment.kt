@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.trackmysleepquality.sleeptracker
+package com.pouyamiralayi.android.datatracker.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,14 +25,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.android.trackmysleepquality.R
-import com.example.android.trackmysleepquality.databinding.FragmentSleepTrackerBinding
-import com.example.android.trackmysleepquality.datatracker.DataViewModel
-import com.example.android.trackmysleepquality.datatracker.DataViewModelFactory
-import com.example.android.trackmysleepquality.hideKeyboard
+import com.pouyamiralayi.android.datatracker.R
+import com.pouyamiralayi.android.datatracker.databinding.FragmentSleepTrackerBinding
+import com.pouyamiralayi.android.datatracker.datatracker.DataViewModel
+import com.pouyamiralayi.android.datatracker.datatracker.DataViewModelFactory
+import com.pouyamiralayi.android.datatracker.hideKeyboard
 
-class SleepTrackerFragment : Fragment() {
+class TrackerFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -46,7 +45,7 @@ class SleepTrackerFragment : Fragment() {
         val application = requireNotNull(this.activity).application
 
         val args = arguments?.let {
-            SleepTrackerFragmentArgs.fromBundle(it)
+            TrackerFragmentArgs.fromBundle(it)
         }
         val viewModelFactory = DataViewModelFactory(args?.customerName ?: "", args?.customerNo
                 ?: "")

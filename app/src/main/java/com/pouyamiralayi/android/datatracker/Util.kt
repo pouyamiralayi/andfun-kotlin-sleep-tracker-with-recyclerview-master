@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.trackmysleepquality
+package com.pouyamiralayi.android.datatracker
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.res.Resources

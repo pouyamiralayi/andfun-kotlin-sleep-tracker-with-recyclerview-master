@@ -1,10 +1,10 @@
-package com.example.android.trackmysleepquality.login
+package com.pouyamiralayi.android.datatracker.login
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.android.trackmysleepquality.datatracker.ApiState
-import com.example.android.trackmysleepquality.network.StrapiApi
+import com.pouyamiralayi.android.datatracker.datatracker.ApiState
+import com.pouyamiralayi.android.datatracker.network.StrapiApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

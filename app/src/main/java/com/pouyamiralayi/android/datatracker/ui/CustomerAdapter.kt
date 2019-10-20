@@ -1,4 +1,4 @@
-package com.example.android.trackmysleepquality.sleeptracker
+package com.pouyamiralayi.android.datatracker.ui
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.android.trackmysleepquality.database.Customer
-import com.example.android.trackmysleepquality.databinding.CustomerItemViewBinding
-import com.example.android.trackmysleepquality.databinding.HeaderBinding
+import com.pouyamiralayi.android.datatracker.database.Customer
+import com.pouyamiralayi.android.datatracker.databinding.CustomerItemViewBinding
+import com.pouyamiralayi.android.datatracker.databinding.HeaderBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

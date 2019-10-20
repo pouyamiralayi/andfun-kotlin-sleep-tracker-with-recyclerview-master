@@ -219,10 +219,10 @@
 
         <variable
             name="seller"
-            type="com.example.android.trackmysleepquality.database.Seller" />
+            type="com.pouyamiralayi.android.datatracker.database.Seller" />
 
         <variable
             name="clickListener"
-            type="com.example.android.trackmysleepquality.sleeptracker.SellerListener" />
+            type="com.pouyamiralayi.android.datatracker.ui.SellerListener" />
     </data>
 </layout>

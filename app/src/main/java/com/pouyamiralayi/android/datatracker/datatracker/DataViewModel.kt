@@ -1,9 +1,9 @@
-package com.example.android.trackmysleepquality.datatracker
+package com.pouyamiralayi.android.datatracker.datatracker
 
 import androidx.lifecycle.*
-import com.example.android.trackmysleepquality.database.Customer
-import com.example.android.trackmysleepquality.database.Seller
-import com.example.android.trackmysleepquality.network.StrapiApi
+import com.pouyamiralayi.android.datatracker.database.Customer
+import com.pouyamiralayi.android.datatracker.database.Seller
+import com.pouyamiralayi.android.datatracker.network.StrapiApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

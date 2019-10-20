@@ -25,7 +25,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.android.trackmysleepquality.datatracker.DataViewModel" />
+            type="com.pouyamiralayi.android.datatracker.datatracker.DataViewModel" />
         <variable
             name="View"
             type="android.view.View" />
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/rounded_corner"
-        tools:context=".sleeptracker.SleepTrackerFragment">
+        tools:context=".ui.TrackerFragment">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"

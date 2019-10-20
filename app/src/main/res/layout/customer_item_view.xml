@@ -6,12 +6,12 @@
     <data>
         <variable
             name="customer"
-            type="com.example.android.trackmysleepquality.database.Customer" />
+            type="com.pouyamiralayi.android.datatracker.database.Customer" />
 
 
         <variable
             name="clickListener"
-            type="com.example.android.trackmysleepquality.sleeptracker.CustomerListener" />
+            type="com.pouyamiralayi.android.datatracker.ui.CustomerListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
