@@ -57,14 +57,38 @@ fun ImageView.setCustomerImage(item: Customer?) {
 @BindingAdapter("customerOwed")
 fun TextView.setCustomerOwed(item: Customer?) {
     item?.let {
-        text = "بدهکار: " + String.format("%,.0f", item.owed.toDouble())
+        text = "بدهکار: " + String.format("%,.0f", item.owed?.toDouble() ?: 0.0)
     }
 }
 
 @BindingAdapter("customerOwned")
 fun TextView.setCustomerOwned(item: Customer?) {
     item?.let {
-        text = "بستانکار: " + String.format("%,.0f", item.owned.toDouble())
+        text = "بستانکار: " + String.format("%,.0f", item.owned?.toDouble() ?: 0.0)
+    }
+}
+
+@BindingAdapter("owedColor")
+fun TextView.setOwedColor(item: Customer?) {
+    if (item?.owed == null) {
+        setTextColor(resources.getColor(R.color.gray_text_color))
+    } else if (item.owed == "0") {
+        setTextColor(resources.getColor(R.color.gray_text_color))
+    } else {
+        setTextColor(resources.getColor(R.color.colorRed_A400))
+
+    }
+}
+
+@BindingAdapter("ownedColor")
+fun TextView.setOwnedColor(item: Customer?) {
+    if (item?.owned == null) {
+        setTextColor(resources.getColor(R.color.gray_text_color))
+    } else if (item.owned == "0") {
+        setTextColor(resources.getColor(R.color.gray_text_color))
+    } else {
+        setTextColor(resources.getColor(R.color.colorGreen_A400))
+
     }
 }
 
@@ -77,33 +101,31 @@ fun TextView.setSellerPayment(item: Seller?) {
 
 @BindingAdapter("date")
 fun TextView.setDate(date: String) {
-    try{
+    try {
         val splitted = date.split('T')[0]
         val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
         val formatted = persianDateFormat.parseGrg(splitted)
         setText("تاریخ: " + PersianDateFormat.format(formatted, "l j F Y"))
-    }
-    catch(t: Throwable){
+    } catch (t: Throwable) {
         setText("تاریخ : " + "تعریف نشده است")
     }
 }
 
 @BindingAdapter("exdate")
 fun TextView.setExDate(date: String) {
-    try{
+    try {
         val splitted = date.split('T')[0]
         val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
         val formatted = persianDateFormat.parseGrg(splitted)
         setText("تاریخ سررسید: " + PersianDateFormat.format(formatted, "l j F Y"))
-    }
-    catch(t: Throwable){
+    } catch (t: Throwable) {
         setText("تاریخ سررسید: " + "تعریف نشده است")
     }
 }
 
 @BindingAdapter("bindState")
-fun ImageView.setBindState(state: ApiState){
-    when(state){
+fun ImageView.setBindState(state: ApiState) {
+    when (state) {
         ApiState.LOADING -> {
             visibility = View.VISIBLE
             setImageResource(R.drawable.loading_animation)
@@ -122,8 +144,8 @@ fun ImageView.setBindState(state: ApiState){
 }
 
 @BindingAdapter("bindStateLogin")
-fun ImageView.setBindStateLogin(state: ApiState){
-    when(state){
+fun ImageView.setBindStateLogin(state: ApiState) {
+    when (state) {
         ApiState.LOADING -> {
             visibility = View.VISIBLE
             setImageResource(R.drawable.loading_animation)

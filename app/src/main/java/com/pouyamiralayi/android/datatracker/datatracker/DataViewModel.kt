@@ -119,7 +119,7 @@ class DataViewModel(val customer_name: String, val customer_no: String, val _jwt
         owed.addSource(customers) {
             coroutineScope.launch {
                 customers.value?.let {
-                    val res = it.map { it.owed.toDouble() }.sum()
+                    val res = it.map { it.owed?.toDouble() ?: 0.0 }.sum()
                     owed.postValue(String.format("%,.0f", res.toDouble()))
                 }
             }
@@ -127,7 +127,7 @@ class DataViewModel(val customer_name: String, val customer_no: String, val _jwt
         owned.addSource(customers) {
             coroutineScope.launch {
                 customers.value?.let {
-                    val res = it.map { it.owned.toDouble() }.sum()
+                    val res = it.map { it.owned?.toDouble() ?: 0.0 }.sum()
                     owned.postValue(String.format("%,.0f", res.toDouble()))
                 }
             }
@@ -139,7 +139,7 @@ class DataViewModel(val customer_name: String, val customer_no: String, val _jwt
     fun fetchCustomers() {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer ${jwt.value}",customerNo.value
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer ${jwt.value}", customerNo.value
                     ?: "")
             Log.i("Login", jwt.value)
             try {
@@ -159,7 +159,8 @@ class DataViewModel(val customer_name: String, val customer_no: String, val _jwt
     fun fetchSellers() {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer ${jwt.value}",customerNo.value ?: "")
+            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer ${jwt.value}", customerNo.value
+                    ?: "")
             Log.i("Login", jwt.value)
             try {
                 state.value = ApiState.LOADING
