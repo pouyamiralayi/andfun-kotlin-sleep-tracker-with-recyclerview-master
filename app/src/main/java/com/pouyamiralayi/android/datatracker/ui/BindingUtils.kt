@@ -100,26 +100,30 @@ fun TextView.setSellerPayment(item: Seller?) {
 }
 
 @BindingAdapter("date")
-fun TextView.setDate(date: String) {
-    try {
-        val splitted = date.split('T')[0]
-        val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
-        val formatted = persianDateFormat.parseGrg(splitted)
-        setText("تاریخ: " + PersianDateFormat.format(formatted, "l j F Y"))
-    } catch (t: Throwable) {
-        setText("تاریخ : " + "تعریف نشده است")
+fun TextView.setDate(date: String?) {
+    date?.let {
+        try {
+            val splitted = date.split('T')[0]
+            val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
+            val formatted = persianDateFormat.parseGrg(splitted)
+            setText("تاریخ: " + PersianDateFormat.format(formatted, "l j F Y"))
+        } catch (t: Throwable) {
+            setText("تاریخ : " + "تعریف نشده است")
+        }
     }
 }
 
 @BindingAdapter("exdate")
-fun TextView.setExDate(date: String) {
-    try {
-        val splitted = date.split('T')[0]
-        val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
-        val formatted = persianDateFormat.parseGrg(splitted)
-        setText("تاریخ سررسید: " + PersianDateFormat.format(formatted, "l j F Y"))
-    } catch (t: Throwable) {
-        setText("تاریخ سررسید: " + "تعریف نشده است")
+fun TextView.setExDate(date: String?) {
+    date?.let{
+        try {
+            val splitted = date.split('T')[0]
+            val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
+            val formatted = persianDateFormat.parseGrg(splitted)
+            setText("تاریخ سررسید: " + PersianDateFormat.format(formatted, "l j F Y"))
+        } catch (t: Throwable) {
+            setText("تاریخ سررسید: " + "تعریف نشده است")
+        }
     }
 }
 

@@ -10,7 +10,7 @@ data class Customer(
         @Json(name = "customer_name") var customerName: String = "",
         var owed: String? = "",
         var owned: String? = "",
-        var date: String = "",
+        var date: String? = "",
         var description: String = "",
         @Json(name = "created_at") var createdAt: String = "",
         @Json(name = "updated_at") var updatedAt: String = ""
