@@ -4,19 +4,19 @@ import com.squareup.moshi.Json
 
 data class Seller(
         var id : Int = 0,
-        @Json(name = "fin_year") var finYear: String = "",
+        @field:Json(name = "fin_year") var finYear: String = "",
         var description: String = "",
-        @Json(name = "record_no") var recordNo: String = "",
-        @Json(name = "expire_date") var expireDate: String? = "",
-        @Json(name = "seller_no") var sellerNo: String = "",
-        @Json(name = "seller_name") var sellerName: String = "",
-        @Json(name = "product_no") var productNo: String = "",
+        @field:Json(name = "record_no") var recordNo: String = "",
+        @field:Json(name = "expire_date") var expireDate: String? = "",
+        @field:Json(name = "seller_no") var sellerNo: String = "",
+        @field:Json(name = "seller_name") var sellerName: String = "",
+        @field:Json(name = "product_no") var productNo: String = "",
         var product: String = "",
-        @Json(name = "first_unit") var firstUnit: String = "",
+        @field:Json(name = "first_unit") var firstUnit: String = "",
         var quantity: String = "",
         var rate: String = "",
         var payment: String = "",
         var date: String? = "",
-        @Json(name = "created_at") var createdAt: String = "",
-        @Json(name = "updated_at") var updatedAt: String = ""
+        @field:Json(name = "created_at") var createdAt: String = "",
+        @field:Json(name = "updated_at") var updatedAt: String = ""
 )
