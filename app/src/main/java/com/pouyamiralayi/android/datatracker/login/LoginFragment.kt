@@ -25,7 +25,7 @@ class LoginFragment : Fragment(){
             it?.let{
                 if(it){
                     findNavController()
-                            .navigate(LoginFragmentDirections.actionLoginFragmentToSleepTrackerFragment(viewModel.customer_name.value ?: "", viewModel.username.value ?: ""))
+                            .navigate(LoginFragmentDirections.actionLoginFragmentToSleepTrackerFragment(viewModel.customer_name.value ?: "", viewModel.username.value ?: "", viewModel.jwt.value ?: ""))
                     viewModel.onNavigateToCustomersCompleted()
                 }
             }

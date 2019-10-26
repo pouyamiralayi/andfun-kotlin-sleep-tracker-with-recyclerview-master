@@ -43,6 +43,9 @@
         <argument
             android:name="customerNo"
             app:argType="string" />
+        <argument
+            android:name="jwt"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"

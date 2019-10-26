@@ -1,5 +1,6 @@
 package com.pouyamiralayi.android.datatracker.datatracker
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.pouyamiralayi.android.datatracker.database.Customer
 import com.pouyamiralayi.android.datatracker.database.Seller
@@ -10,10 +11,11 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 enum class ApiState { LOADING, ERROR, DONE }
-class DataViewModel(val customer_name: String, val customer_no: String) : ViewModel() {
+class DataViewModel(val customer_name: String, val customer_no: String, val _jwt: String) : ViewModel() {
 
     val customerName = MutableLiveData<String>()
     val customerNo = MutableLiveData<String>()
+    val jwt = MutableLiveData<String>()
 
     val state = MutableLiveData<ApiState>()
 
@@ -112,6 +114,7 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
         _customersScreen.value = true
         customerName.value = customer_name
         customerNo.value = customer_no
+        jwt.value = _jwt
 
         owed.addSource(customers) {
             coroutineScope.launch {
@@ -136,18 +139,19 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
     fun fetchCustomers() {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers(customerNo.value
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer ${jwt.value}",customerNo.value
                     ?: "")
+            Log.i("Login", jwt.value)
             try {
                 state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()
                 state.value = ApiState.DONE
                 customers.value = resultList
             } catch (t: Throwable) {
-                state.value = ApiState.ERROR
+                state.value = ApiState.DONE
                 customers.value = listOf()
-                fetchError.value = "خطا!"
-//                fetchError.value = t.message
+//                fetchError.value = "خطا!"
+                fetchError.value = t.message
             }
         }
     }
@@ -155,16 +159,17 @@ class DataViewModel(val customer_name: String, val customer_no: String) : ViewMo
     fun fetchSellers() {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getSellers(customerNo.value ?: "")
+            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer ${jwt.value}",customerNo.value ?: "")
+            Log.i("Login", jwt.value)
             try {
                 state.value = ApiState.LOADING
                 val resultList = getCustomersDeferred.await()
                 state.value = ApiState.DONE
                 sellers.value = resultList
             } catch (t: Throwable) {
-                state.value = ApiState.ERROR
-                fetchError.value = "خطا!"
-//                fetchError.value = t.message
+                state.value = ApiState.DONE
+//                fetchError.value = "خطا!"
+                fetchError.value = t.message
                 sellers.value = listOf()
             }
         }

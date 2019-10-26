@@ -23,7 +23,7 @@ class LoginViewModel : ViewModel() {
     val username = MutableLiveData<String>()
     val password = MutableLiveData<String>()
     val customer_name = MutableLiveData<String>()
-
+    val jwt = MutableLiveData<String>()
 
     fun onNavigateToCustomersCompleted() {
         navigateToCustomers.value = false
@@ -38,12 +38,14 @@ class LoginViewModel : ViewModel() {
             return
         } else {
             coroutineScope.launch {
-                val loginDeferred = StrapiApi.retrofitService.login(username.value ?: "", password.value ?: "")
+                val loginDeferred = StrapiApi.retrofitService.login(username.value
+                        ?: "", password.value ?: "")
                 try {
                     state.value = ApiState.LOADING
                     val res = loginDeferred.await()
                     state.value = ApiState.DONE
                     customer_name.value = res.user.email
+                    jwt.value = res.jwt
                     navigateToCustomers.value = true
                 } catch (t: Throwable) {
                     Log.i("login", t.message)
@@ -55,6 +57,7 @@ class LoginViewModel : ViewModel() {
     }
 
     init {
+        jwt.value = ""
         navigateToCustomers.value = false
         state.value = ApiState.DONE
         customer_name.value = ""

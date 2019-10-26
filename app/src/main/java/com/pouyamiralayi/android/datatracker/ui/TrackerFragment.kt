@@ -48,7 +48,7 @@ class TrackerFragment : Fragment() {
             TrackerFragmentArgs.fromBundle(it)
         }
         val viewModelFactory = DataViewModelFactory(args?.customerName ?: "", args?.customerNo
-                ?: "")
+                ?: "", args?.jwt ?: "")
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DataViewModel::class.java)
 
         binding.viewModel = viewModel

@@ -94,10 +94,10 @@ fun TextView.setExDate(date: String) {
         val splitted = date.split('T')[0]
         val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
         val formatted = persianDateFormat.parseGrg(splitted)
-        setText("تاریخ انقضا: " + PersianDateFormat.format(formatted, "l j F Y"))
+        setText("تاریخ سررسید: " + PersianDateFormat.format(formatted, "l j F Y"))
     }
     catch(t: Throwable){
-        setText("تاریخ انقضا: " + "تعریف نشده است")
+        setText("تاریخ سررسید: " + "تعریف نشده است")
     }
 }
 

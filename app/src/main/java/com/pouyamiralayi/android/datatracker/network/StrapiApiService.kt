@@ -26,14 +26,14 @@ private val retrofit = Retrofit.Builder()
 
 interface StrapiApiService {
     @GET("customers")
-    fun getCustomers(@Query("customer_no") customer_no: String):
+    fun getCustomers(@Header("Authorization") token:String, @Query("customer_no") customer_no: String):
             Deferred<List<Customer>>
 
     @GET("sellers")
-    fun getSellers(@Query("seller_no") seller_no: String):
+    fun getSellers(@Header("Authorization") token:String , @Query("seller_no") seller_no: String):
             Deferred<List<Seller>>
 
-    @POST("auth/local")
+    @POST("login")
     @FormUrlEncoded
     fun login(@Field("identifier") identifier: String, @Field("password") password: String):
         Deferred<LoginResp>
