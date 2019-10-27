@@ -3,7 +3,7 @@ package com.pouyamiralayi.android.datatracker.login
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.pouyamiralayi.android.datatracker.datatracker.ApiState
+import com.pouyamiralayi.android.datatracker.network.ApiState
 import com.pouyamiralayi.android.datatracker.network.StrapiApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

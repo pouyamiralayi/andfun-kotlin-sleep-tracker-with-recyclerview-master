@@ -3,6 +3,8 @@ package com.pouyamiralayi.android.datatracker.ui
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedList
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,31 +20,43 @@ private const val ITEM_VIEW_HEADER = 0
 private const val ITEM_VIEW_ITEM = 1
 
 
-class CustomerAdapter(val clickListener: CustomerListener) : ListAdapter<DataItem, RecyclerView.ViewHolder>(CustomerDiffCallback()) {
+class CustomerAdapter(val clickListener: CustomerListener, val customerNo:String, val customerName:String) : PagedListAdapter<Customer, RecyclerView.ViewHolder>(CustomerDiffCallback()) {
+
+    var owed = "0"
+        set(value) {
+            field = value
+            notifyItemChanged(0)
+        }
+    var owned = "0"
+        set(value) {
+            field = value
+            notifyItemChanged(0)
+        }
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    fun addHeaderAndSubmitList(list: List<Customer>, customerName: String, customerNo:String, owed: String, owned: String) {
-        adapterScope.launch {
-            val items = when (list) {
-                null -> listOf(DataItem.Header(customerName, customerNo, owed, owned))
-                else -> listOf(DataItem.Header(customerName, customerNo, owed, owned)) + list.map { DataItem.CustomerItem(it) }
-            }
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
-        }
-    }
+//    fun addHeaderAndSubmitList(list: List<Customer>, customerName: String, customerNo:String, owed: String, owned: String) {
+//        adapterScope.launch {
+//            val items = when (list) {
+//                null -> (listOf(DataItem.Header(customerName, customerNo, owed, owned)))
+//                else -> (listOf(DataItem.Header(customerName, customerNo, owed, owned)) + list.map { DataItem.CustomerItem(it) })
+//            }
+//            withContext(Dispatchers.Main) {
+//                submitList(items)
+//            }
+//        }
+//    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolder -> {
-                val customerItem = getItem(position) as DataItem.CustomerItem
-                holder.bind(customerItem.customer, clickListener)
+                val customerItem = getItem(position)
+                customerItem?.let {
+                    holder.bind(customerItem, clickListener)
+                }
             }
             is TextViewHolder -> {
-                val headerItem = getItem(position) as DataItem.Header
-                holder.bind(headerItem.customerName, headerItem.customerNo,headerItem.owed, headerItem.owned)
+                holder.bind(customerName, customerNo, owed, owned)
 
             }
         }
@@ -56,11 +70,17 @@ class CustomerAdapter(val clickListener: CustomerListener) : ListAdapter<DataIte
         }
     }
 
+
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is DataItem.Header -> ITEM_VIEW_HEADER
-            is DataItem.CustomerItem -> ITEM_VIEW_ITEM
+        when (position){
+            0 -> return ITEM_VIEW_HEADER
+            else -> return ITEM_VIEW_ITEM
         }
+//        return when (getItem(position)) {
+//            is DataItem.Header -> ITEM_VIEW_HEADER
+//            is DataItem.CustomerItem -> ITEM_VIEW_ITEM
+//            else -> -1
+//        }
     }
 
     class ViewHolder private constructor(val binding: CustomerItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -100,13 +120,13 @@ class CustomerAdapter(val clickListener: CustomerListener) : ListAdapter<DataIte
 
 }
 
-class CustomerDiffCallback : DiffUtil.ItemCallback<DataItem>() {
-    override fun areItemsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+class CustomerDiffCallback : DiffUtil.ItemCallback<Customer>() {
+    override fun areItemsTheSame(oldItem: Customer, newItem: Customer): Boolean {
         return oldItem.id == newItem.id
     }
 
     @SuppressLint("DiffUtilEquals")
-    override fun areContentsTheSame(oldItem: DataItem, newItem: DataItem): Boolean {
+    override fun areContentsTheSame(oldItem: Customer, newItem: Customer): Boolean {
         return oldItem == newItem
     }
 

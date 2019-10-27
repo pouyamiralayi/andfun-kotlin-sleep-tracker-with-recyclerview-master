@@ -16,6 +16,7 @@
 
 package com.pouyamiralayi.android.datatracker.ui
 
+import android.annotation.SuppressLint
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -23,7 +24,7 @@ import com.pouyamiralayi.android.datatracker.R
 import com.pouyamiralayi.android.datatracker.database.Customer
 import android.view.View
 import com.pouyamiralayi.android.datatracker.database.Seller
-import com.pouyamiralayi.android.datatracker.datatracker.ApiState
+import com.pouyamiralayi.android.datatracker.network.ApiState
 import saman.zamani.persiandate.PersianDateFormat
 
 
@@ -54,6 +55,7 @@ fun ImageView.setCustomerImage(item: Customer?) {
 //    }
 //}
 
+@SuppressLint("SetTextI18n")
 @BindingAdapter("customerOwed")
 fun TextView.setCustomerOwed(item: Customer?) {
     item?.let {
@@ -61,6 +63,7 @@ fun TextView.setCustomerOwed(item: Customer?) {
     }
 }
 
+@SuppressLint("SetTextI18n")
 @BindingAdapter("customerOwned")
 fun TextView.setCustomerOwned(item: Customer?) {
     item?.let {
@@ -70,13 +73,10 @@ fun TextView.setCustomerOwned(item: Customer?) {
 
 @BindingAdapter("owedColor")
 fun TextView.setOwedColor(item: Customer?) {
-    if (item?.owed == null) {
-        setTextColor(resources.getColor(R.color.gray_text_color))
-    } else if (item.owed == "0") {
-        setTextColor(resources.getColor(R.color.gray_text_color))
-    } else {
-        setTextColor(resources.getColor(R.color.colorRed_A400))
-
+    when {
+        item?.owed == null -> setTextColor(resources.getColor(R.color.gray_text_color))
+        item.owed == "0" -> setTextColor(resources.getColor(R.color.gray_text_color))
+        else -> setTextColor(resources.getColor(R.color.colorRed_A400))
     }
 }
 
@@ -128,20 +128,22 @@ fun TextView.setExDate(date: String?) {
 }
 
 @BindingAdapter("bindState")
-fun ImageView.setBindState(state: ApiState) {
-    when (state) {
-        ApiState.LOADING -> {
-            visibility = View.VISIBLE
-            setImageResource(R.drawable.loading_animation)
-        }
-        ApiState.ERROR -> {
-            visibility = View.VISIBLE
-            setImageResource(R.drawable.ic_connection_error)
-        }
+fun ImageView.setBindState(state: ApiState?) {
+    state?.let{
+        when (state) {
+            ApiState.LOADING -> {
+                visibility = View.VISIBLE
+                setImageResource(R.drawable.loading_animation)
+            }
+            ApiState.ERROR -> {
+                visibility = View.VISIBLE
+                setImageResource(R.drawable.ic_connection_error)
+            }
 
-        ApiState.DONE -> {
-            visibility = View.GONE
-        }
+            ApiState.DONE -> {
+                visibility = View.GONE
+            }
+    }
 
 
     }

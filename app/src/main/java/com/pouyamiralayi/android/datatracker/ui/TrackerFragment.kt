@@ -154,7 +154,7 @@ class TrackerFragment : Fragment() {
             /*TODO show a dialog of the description*/
 //            Toast.makeText(context, "$customerId", Toast.LENGTH_SHORT)
 //                    .show()
-        })
+        }, viewModel.customerNo.value ?: "", viewModel.customerName.value ?: "")
         val adapter2 = SellerAdapter(SellerListener { sellerId ->
             /*TODO show a dialog of the description*/
         })
@@ -165,26 +165,37 @@ class TrackerFragment : Fragment() {
 
         viewModel.customers.observe(this, Observer {
             it?.let {
-                adapter.addHeaderAndSubmitList(it, viewModel.customerName.value
-                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
-                        ?: "", viewModel.owned.value.toString() ?: "")
+                adapter.submitList(it)
             }
+//            it?.let {
+//                adapter.addHeaderAndSubmitList(it.snapshot(), viewModel.customerName.value
+//                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
+//                        ?: "", viewModel.owned.value.toString() ?: "")
+//            }
         })
 
         viewModel.owed.observe(this, Observer {
             it?.let {
-                adapter.addHeaderAndSubmitList(viewModel.customers.value ?: listOf(), viewModel.customerName.value
-                        ?: "", viewModel.customerNo.value ?: "", it.toString()
-                        ?: "", viewModel.owned.value.toString() ?: "")
+                adapter.owed = it
             }
+//            it?.let {
+//                adapter.addHeaderAndSubmitList(viewModel.customers.value?.snapshot()
+//                        ?: listOf(), viewModel.customerName.value
+//                        ?: "", viewModel.customerNo.value ?: "", it.toString()
+//                        ?: "", viewModel.owned.value.toString() ?: "")
+//            }
         })
 
         viewModel.owned.observe(this, Observer {
             it?.let {
-                adapter.addHeaderAndSubmitList(viewModel.customers.value ?: listOf(), viewModel.customerName.value
-                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
-                        ?: "", it.toString() ?: "")
+                adapter.owned = it
             }
+//            it?.let {
+//                adapter.addHeaderAndSubmitList(viewModel.customers.value?.snapshot()
+//                        ?: listOf(), viewModel.customerName.value
+//                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
+//                        ?: "", it.toString() ?: "")
+//            }
         })
 
 

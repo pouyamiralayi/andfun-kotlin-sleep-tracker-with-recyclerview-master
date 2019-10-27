@@ -11,6 +11,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
+enum class ApiState { LOADING, ERROR, DONE }
+
+
 private const val API_URL = "http://10.30.205.75:1339"
 
 private val moshi = Moshi.Builder()
@@ -25,18 +28,23 @@ private val retrofit = Retrofit.Builder()
         .build()
 
 interface StrapiApiService {
+    @GET("customers/count")
+    fun getCustomersCount(@Header("Authorization") token: String, @Query("customer_no") customer_no: String):
+            Deferred<Int>
+
+
     @GET("customers")
-    fun getCustomers(@Header("Authorization") token:String, @Query("customer_no") customer_no: String):
+    fun getCustomers(@Header("Authorization") token: String, @Query("customer_no") customer_no: String, @Query("_start") start: Int, @Query("_limit") limit: Int):
             Deferred<List<Customer>>
 
     @GET("sellers")
-    fun getSellers(@Header("Authorization") token:String , @Query("seller_no") seller_no: String):
+    fun getSellers(@Header("Authorization") token: String, @Query("seller_no") seller_no: String, @Query("_start") start: Int, @Query("_limit") limit: Int):
             Deferred<List<Seller>>
 
     @POST("login")
     @FormUrlEncoded
     fun login(@Field("identifier") identifier: String, @Field("password") password: String):
-        Deferred<LoginResp>
+            Deferred<LoginResp>
 }
 
 object StrapiApi {
