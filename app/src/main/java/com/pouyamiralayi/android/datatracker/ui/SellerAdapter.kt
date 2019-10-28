@@ -28,7 +28,7 @@ class SellerAdapter(val clickListener: SellerListener, val customerNo: String, v
     var state: ApiState = ApiState.DONE
         set(value) {
             field = value
-            notifyItemChanged(super.getItemCount())
+            notifyItemChanged(super.getItemCount()-1)
         }
     /*these are not needed, just in case...*/
     var owed = ""
@@ -36,9 +36,6 @@ class SellerAdapter(val clickListener: SellerListener, val customerNo: String, v
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
 
-//    override fun getItemCount(): Int {
-//        return super.getItemCount() + if (hasFooter()) 1 else 0
-//    }
 
     private fun hasFooter(): Boolean {
         return super.getItemCount() != 0 && (state == ApiState.LOADING || state == ApiState.ERROR)

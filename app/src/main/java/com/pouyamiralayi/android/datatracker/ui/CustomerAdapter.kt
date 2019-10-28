@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pouyamiralayi.android.datatracker.database.Customer
 import com.pouyamiralayi.android.datatracker.databinding.CustomerItemViewBinding
 import com.pouyamiralayi.android.datatracker.databinding.HeaderBinding
+import com.pouyamiralayi.android.datatracker.network.ApiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,9 +19,16 @@ import kotlinx.coroutines.withContext
 
 private const val ITEM_VIEW_HEADER = 0
 private const val ITEM_VIEW_ITEM = 1
+private const val ITEM_VIEW_FOOTER = 2
 
 
-class CustomerAdapter(val clickListener: CustomerListener, val customerNo:String, val customerName:String) : PagedListAdapter<Customer, RecyclerView.ViewHolder>(CustomerDiffCallback()) {
+class CustomerAdapter(val clickListener: CustomerListener, val customerNo: String, val customerName: String) : PagedListAdapter<Customer, RecyclerView.ViewHolder>(CustomerDiffCallback()) {
+
+    var state: ApiState = ApiState.DONE
+        set(value) {
+            field = value
+            notifyItemChanged(super.getItemCount() - 1)
+        }
 
     var owed = "0"
         set(value) {
@@ -33,19 +41,13 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo:String
             notifyItemChanged(0)
         }
 
+    private fun hasFooter(): Boolean {
+        return super.getItemCount() != 0 && (state == ApiState.LOADING || state == ApiState.ERROR)
+    }
+
+
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-//    fun addHeaderAndSubmitList(list: List<Customer>, customerName: String, sellerNon:String, owed: String, owned: String) {
-//        adapterScope.launch {
-//            val items = when (list) {
-//                null -> (listOf(DataItem.Header(customerName, sellerNon, owed, owned)))
-//                else -> (listOf(DataItem.Header(customerName, sellerNon, owed, owned)) + list.map { DataItem.CustomerItem(it) })
-//            }
-//            withContext(Dispatchers.Main) {
-//                submitList(items)
-//            }
-//        }
-//    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
@@ -59,6 +61,9 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo:String
                 holder.bind(customerName, customerNo, owed, owned)
 
             }
+            is SellerAdapter.FooterViewHolder -> {
+                holder.bind(state)
+            }
         }
     }
 
@@ -66,21 +71,19 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo:String
         return when (viewType) {
             ITEM_VIEW_HEADER -> TextViewHolder.from(parent)
             ITEM_VIEW_ITEM -> ViewHolder.from(parent)
+            ITEM_VIEW_FOOTER -> SellerAdapter.FooterViewHolder.from(parent)
             else -> throw ClassCastException("unknown view type $viewType")
         }
     }
 
 
     override fun getItemViewType(position: Int): Int {
-        when (position){
-            0 -> return ITEM_VIEW_HEADER
-            else -> return ITEM_VIEW_ITEM
+        return when {
+            position == 0 -> ITEM_VIEW_HEADER
+            hasFooter() && position == super.getItemCount() - 1 -> ITEM_VIEW_FOOTER
+            position < super.getItemCount() -> ITEM_VIEW_ITEM
+            else -> -1
         }
-//        return when (getItem(position)) {
-//            is DataItem.Header -> ITEM_VIEW_HEADER
-//            is DataItem.CustomerItem -> ITEM_VIEW_ITEM
-//            else -> -1
-//        }
     }
 
     class ViewHolder private constructor(val binding: CustomerItemViewBinding) : RecyclerView.ViewHolder(binding.root) {
