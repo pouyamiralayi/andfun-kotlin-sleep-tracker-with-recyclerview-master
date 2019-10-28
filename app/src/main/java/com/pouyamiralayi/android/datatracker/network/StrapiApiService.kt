@@ -4,6 +4,7 @@ import com.pouyamiralayi.android.datatracker.database.Customer
 import com.pouyamiralayi.android.datatracker.database.LoginResp
 import com.pouyamiralayi.android.datatracker.database.Seller
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import com.pouyamiralayi.android.datatracker.database.OwedResponse
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -28,6 +29,11 @@ private val retrofit = Retrofit.Builder()
         .build()
 
 interface StrapiApiService {
+
+    @GET("customers/owed")
+    fun getOwed(@Header("Authorization") token: String, @Query("customer_no") customer_no: String):
+            Deferred<OwedResponse>
+
     @GET("customers/count")
     fun getCustomersCount(@Header("Authorization") token: String, @Query("customer_no") customer_no: String):
             Deferred<Int>

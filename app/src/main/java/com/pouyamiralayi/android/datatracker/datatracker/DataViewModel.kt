@@ -6,10 +6,8 @@ import androidx.paging.PagedList
 import com.pouyamiralayi.android.datatracker.database.Customer
 import com.pouyamiralayi.android.datatracker.database.Seller
 import com.pouyamiralayi.android.datatracker.network.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.net.SocketTimeoutException
 
 
 class DataViewModel(val customerName: String, val customerNo: String, private val jwt: String) : ViewModel() {
@@ -22,6 +20,12 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
     /*Api*/
     val customers: LiveData<PagedList<Customer>>
+    val fetchErrorCustomers: LiveData<String>
+    private val stateCustomers: LiveData<ApiState>
+    val owed = MutableLiveData<String>()
+    val owned = MutableLiveData<String>()
+    val rem = MutableLiveData<String>()
+    val plus = MutableLiveData<Boolean>()
 
     @Suppress("MemberVisibilityCanBePrivate")
     fun searchCustomers(query: String) {
@@ -31,8 +35,28 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
     fun reload() {
         when (_customersScreen.value) {
-            true -> searchCustomers("")
+            true -> {
+                searchCustomers("")
+                fetchOwed()
+            }
             else -> searchSellers("")
+        }
+    }
+
+    fun fetchOwed() {
+        coroutineScope.launch {
+            val getCustomersOwed = StrapiApi.retrofitService.getOwed("Bearer $jwt", customerNo)
+            try {
+                val result  =  getCustomersOwed.await()
+                owed.postValue(String.format("%,.0f", result.owed.toDouble()))
+                owned.postValue(String.format("%,.0f", result.owned.toDouble()))
+                rem.postValue(String.format("%,.0f", result.rem.toDouble()))
+                plus.postValue(result.plus)
+            } catch (e: SocketTimeoutException) {
+
+            } catch (t: Throwable) {
+
+            }
         }
     }
 
@@ -44,29 +68,22 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     }
 
     val sellers: LiveData<PagedList<Seller>>
+    val fetchErrorSellers: LiveData<String>
+    private val stateSellers: LiveData<ApiState>
     fun searchSellers(query: String) {
         sellerDataSourceFactory.search(query)
         sellers.value?.dataSource?.invalidate()
     }
 
     val state = MediatorLiveData<ApiState>()
-    private val stateCustomers: LiveData<ApiState>
-    private val stateSellers: LiveData<ApiState>
     val fetchError = MediatorLiveData<String>()
-    val fetchErrorCustomers: LiveData<String>
-    val fetchErrorSellers: LiveData<String>
-    val owed = MediatorLiveData<String>()
-    val owned = MediatorLiveData<String>()
+
 
 
     /*Co-Routine*/
-    private val apiJob = Job()
+    private val apiJob = SupervisorJob()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
-//    val queryNotFound = MutableLiveData<Boolean>()
-//    fun onQueryNotFoundCompleted() {
-//        queryNotFound.value = false
-//    }
 
 
     private val _customersScreen = MutableLiveData<Boolean>()
@@ -74,7 +91,6 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         get() = _customersScreen
 
     init {
-//        queryNotFound.value = false
         _customersScreen.value = true
 
         //creating data source factory
@@ -109,23 +125,7 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         fetchError.addSource(fetchErrorSellers) {
             fetchError.value = fetchErrorSellers.value
         }
-
-        owed.addSource(customers) {
-            coroutineScope.launch {
-                customers.value?.let {
-                    val res = it.map { it.owed?.toDouble() ?: 0.0 }.sum()
-                    owed.postValue(String.format("%,.0f", res.toDouble()))
-                }
-            }
-        }
-        owned.addSource(customers) {
-            coroutineScope.launch {
-                customers.value?.let {
-                    val res = it.map { it.owned?.toDouble() ?: 0.0 }.sum()
-                    owned.postValue(String.format("%,.0f", res.toDouble()))
-                }
-            }
-        }
+        fetchOwed()
     }
 
 
@@ -149,12 +149,4 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         super.onCleared()
         apiJob.cancel()
     }
-
-
-    /*TODO*/
-//    fun getCustomerById(customerId: Int){
-//
-//    }
-
-
 }

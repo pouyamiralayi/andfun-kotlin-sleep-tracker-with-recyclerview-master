@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -98,67 +97,9 @@ class TrackerFragment : Fragment() {
         })
 
 
-//        viewModel.queryNotFound.observe(this, Observer {
-//            when (it) {
-//                true -> {
-//                    Toast.makeText(context, "داده ای یافت نشد.", Toast.LENGTH_SHORT)
-//                            .show()
-//                    viewModel.onQueryNotFoundCompleted()
-//                }
-//                else -> null
-//            }
-//
-//        })
-
-
-
-//        viewModel.fetchError.observe(this, Observer { error ->
-//            Toast.makeText(context, "$error", Toast.LENGTH_SHORT)
-//                    .show()
-//        })
-
-
-        // Add an Observer on the state variable for showing a Snackbar message
-        // when the CLEAR button is pressed.
-//        sleepTrackerViewModel.showSnackBarEvent.observe(this, Observer {
-//            if (it == true) { // Observed state is true.
-//                Snackbar.make(
-//                        activity!!.findViewById(android.R.id.content),
-//                        getString(R.string.cleared_message),
-//                        Snackbar.LENGTH_SHORT // How long to display the message.
-//                ).show()
-//                // Reset state to make sure the snackbar is only shown once, even if the device
-//                // has a configuration change.
-//                sleepTrackerViewModel.doneShowingSnackbar()
-//            }
-//        })
-
-
-//        val manager = GridLayoutManager(activity, 3)
-//        val manager2 = GridLayoutManager(activity, 3)
-//        binding.customersList.layoutManager = manager
-//        binding.sellersList.layoutManager = manager2
-
-//        manager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int) = when (position) {
-//                0 -> 3
-//                else -> 1
-//            }
-//        }
-//        manager2.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int) = when (position) {
-//                0 -> 3
-//                else -> 1
-//            }
-//        }
-
         val adapter = CustomerAdapter(CustomerListener { customerId ->
-            /*TODO show a dialog of the description*/
-//            Toast.makeText(context, "$customerId", Toast.LENGTH_SHORT)
-//                    .show()
         }, viewModel.customerNo, viewModel.customerName)
         val adapter2 = SellerAdapter(SellerListener { sellerId ->
-            /*TODO show a dialog of the description*/
         }, viewModel.customerNo, viewModel.customerName)
 
 
@@ -169,20 +110,14 @@ class TrackerFragment : Fragment() {
             it?.let {
                 adapter.submitList(it)
             }
-//            it?.let {
-//                adapter.addHeaderAndSubmitList(it.snapshot(), viewModel.customerName.value
-//                        ?: "", viewModel.sellerNon.value ?: "", viewModel.owed.value.toString()
-//                        ?: "", viewModel.owned.value.toString() ?: "")
-//            }
         })
 
         viewModel.state.observe(this, Observer { state ->
-            if(!viewModel.listIsEmpty()){
+            if (!viewModel.listIsEmpty()) {
                 viewModel.customersScreen.value?.let {
-                    if(it){
+                    if (it) {
                         adapter.state = state ?: ApiState.DONE
-                    }
-                    else{
+                    } else {
                         adapter2.state = state ?: ApiState.DONE
                     }
                 }
@@ -193,31 +128,18 @@ class TrackerFragment : Fragment() {
             it?.let {
                 adapter.owed = it
             }
-//            it?.let {
-//                adapter.addHeaderAndSubmitList(viewModel.customers.value?.snapshot()
-//                        ?: listOf(), viewModel.customerName.value
-//                        ?: "", viewModel.sellerNon.value ?: "", it.toString()
-//                        ?: "", viewModel.owned.value.toString() ?: "")
-//            }
         })
 
         viewModel.owned.observe(this, Observer {
             it?.let {
                 adapter.owned = it
             }
-//            it?.let {
-//                adapter.addHeaderAndSubmitList(viewModel.customers.value?.snapshot()
-//                        ?: listOf(), viewModel.customerName.value
-//                        ?: "", viewModel.sellerNon.value ?: "", viewModel.owed.value.toString()
-//                        ?: "", it.toString() ?: "")
-//            }
         })
 
 
         viewModel.sellers.observe(this, Observer {
             it?.let {
-                    adapter2.submitList(it)
-//                adapter2.addHeaderAndSubmitList(it, viewModel.customerName, viewModel.customerNo, "", "")
+                adapter2.submitList(it)
             }
         })
 

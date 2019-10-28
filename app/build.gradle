@@ -23,7 +23,7 @@ apply plugin: 'androidx.navigation.safeargs'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.android.trackmysleepqualityrecyclerview"
+        applicationId "com.pouyamiralayi.android.datatracker"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -49,10 +49,6 @@ android {
     // Enables data binding.
     dataBinding {
         enabled = true
-    }
-
-    defaultConfig {
-        vectorDrawables.useSupportLibrary = true
     }
 }
 
