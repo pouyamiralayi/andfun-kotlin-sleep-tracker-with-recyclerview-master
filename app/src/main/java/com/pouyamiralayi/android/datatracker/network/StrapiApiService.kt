@@ -42,7 +42,7 @@ interface StrapiApiService {
             Deferred<List<Customer>>
 
     @GET("sellers")
-    fun getSellers(@Header("Authorization") token: String, @Query("seller_no") seller_no: String, @Query("_start") start: Int, @Query("_limit") limit: Int, @Query("description_contains") query: String):
+    fun getSellers(@Header("Authorization") token: String, @Query("seller_no") seller_no: String, @Query("_start") start: Int, @Query("_limit") limit: Int, @Query("product_contains") query: String):
             Deferred<List<Seller>>
 
     @POST("login")
