@@ -36,17 +36,25 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         }
     }
 
-    val sellers : LiveData<PagedList<Seller>>
+    fun listIsEmpty(): Boolean {
+        return when (_customersScreen.value) {
+            true -> (customers.value?.isEmpty() ?: true)
+            else -> (sellers.value?.isEmpty() ?: true)
+        }
+    }
+
+    val sellers: LiveData<PagedList<Seller>>
     fun searchSellers(query: String) {
         sellerDataSourceFactory.search(query)
         sellers.value?.dataSource?.invalidate()
     }
+
     val state = MediatorLiveData<ApiState>()
     private val stateCustomers: LiveData<ApiState>
     private val stateSellers: LiveData<ApiState>
     val fetchError = MediatorLiveData<String>()
-    val fetchErrorCustomers : LiveData<String>
-    val fetchErrorSellers : LiveData<String>
+    val fetchErrorCustomers: LiveData<String>
+    val fetchErrorSellers: LiveData<String>
     val owed = MediatorLiveData<String>()
     val owned = MediatorLiveData<String>()
 
@@ -87,18 +95,18 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         sellers = LivePagedListBuilder(sellerDataSourceFactory, pagedListConfig).build()
         stateCustomers = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::state)
         stateSellers = Transformations.switchMap(sellerDataSourceFactory.getSellerLiveDataSource(), SellerDataSource::state)
-        state.addSource(stateCustomers){
+        state.addSource(stateCustomers) {
             state.value = stateCustomers.value
         }
-        state.addSource(stateSellers){
+        state.addSource(stateSellers) {
             state.value = stateSellers.value
         }
         fetchErrorSellers = Transformations.switchMap(sellerDataSourceFactory.getSellerLiveDataSource(), SellerDataSource::fetchError)
         fetchErrorCustomers = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::fetchError)
-        fetchError.addSource(fetchErrorCustomers){
+        fetchError.addSource(fetchErrorCustomers) {
             fetchError.value = fetchErrorCustomers.value
         }
-        fetchError.addSource(fetchErrorSellers){
+        fetchError.addSource(fetchErrorSellers) {
             fetchError.value = fetchErrorSellers.value
         }
 
@@ -137,13 +145,10 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     }
 
 
-
     override fun onCleared() {
         super.onCleared()
         apiJob.cancel()
     }
-
-
 
 
     /*TODO*/

@@ -135,7 +135,7 @@ fun ImageView.setBindState(state: ApiState?) {
                 visibility = View.VISIBLE
                 setImageResource(R.drawable.loading_animation)
             }
-            ApiState.ERROR -> {
+            ApiState.DISCONNECTED -> {
                 visibility = View.VISIBLE
                 setImageResource(R.drawable.ic_connection_error)
             }

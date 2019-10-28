@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException
 
 
 @Suppress("unused")
-class SellerDataSource(val jwt: String, val sellerNon: String, private val query:String) : PageKeyedDataSource<Int, Seller>() {
+class SellerDataSource(val jwt: String, val sellerNon: String, private val query: String) : PageKeyedDataSource<Int, Seller>() {
 
     private val apiJob = SupervisorJob()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
@@ -36,12 +36,10 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
                 val resultList = getCustomersDeferred.await()
                 callback.onResult(resultList, null, _start + _limit)
                 state.postValue(ApiState.DONE)
-            }
-            catch (e: SocketTimeoutException){
+            } catch (e: SocketTimeoutException) {
+                state.postValue(ApiState.DISCONNECTED)
+            } catch (t: Throwable) {
                 state.postValue(ApiState.ERROR)
-            }
-            catch (t: Throwable) {
-                state.postValue(ApiState.DONE)
                 fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
@@ -63,8 +61,10 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
                 val resultList = getCustomersDeferred.await()
                 callback.onResult(resultList, adjacentKey)
                 state.postValue(ApiState.DONE)
+            } catch (e: SocketTimeoutException) {
+                state.postValue(ApiState.DISCONNECTED)
             } catch (t: Throwable) {
-                state.postValue(ApiState.DONE)
+                state.postValue(ApiState.ERROR)
                 fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
@@ -76,8 +76,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
         try {
             val getCustomersCountDeffered = StrapiApi.retrofitService.getSellersCount("Bearer $jwt", sellerNon)
             resultCount = getCustomersCountDeffered.await()
-        }
-        catch (t:Throwable){
+        } catch (t: Throwable) {
             state.postValue(ApiState.DONE)
         }
         return resultCount
@@ -99,8 +98,10 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
                 callback.onResult(resultList, adjacentKey)
 
                 state.postValue(ApiState.DONE)
+            } catch (e: SocketTimeoutException) {
+                state.postValue(ApiState.DISCONNECTED)
             } catch (t: Throwable) {
-                state.postValue(ApiState.DONE)
+                state.postValue(ApiState.ERROR)
                 fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }

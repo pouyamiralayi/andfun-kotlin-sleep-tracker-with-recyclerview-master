@@ -11,7 +11,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
-enum class ApiState { LOADING, ERROR, DONE }
+enum class ApiState { LOADING, ERROR, DONE, DISCONNECTED }
 
 
 private const val API_URL = "http://10.30.205.75:1339"
@@ -38,7 +38,7 @@ interface StrapiApiService {
 
 
     @GET("customers")
-    fun getCustomers(@Header("Authorization") token: String, @Query("customer_no") customer_no: String, @Query("_start") start: Int, @Query("_limit") limit: Int, @Query("description_contains") query:String):
+    fun getCustomers(@Header("Authorization") token: String, @Query("customer_no") customer_no: String, @Query("_start") start: Int, @Query("_limit") limit: Int, @Query("description_contains") query: String):
             Deferred<List<Customer>>
 
     @GET("sellers")

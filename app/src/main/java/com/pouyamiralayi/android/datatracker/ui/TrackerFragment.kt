@@ -30,6 +30,7 @@ import com.pouyamiralayi.android.datatracker.databinding.FragmentSleepTrackerBin
 import com.pouyamiralayi.android.datatracker.datatracker.DataViewModel
 import com.pouyamiralayi.android.datatracker.datatracker.DataViewModelFactory
 import com.pouyamiralayi.android.datatracker.hideKeyboard
+import com.pouyamiralayi.android.datatracker.network.ApiState
 
 class TrackerFragment : Fragment() {
 
@@ -95,6 +96,7 @@ class TrackerFragment : Fragment() {
             }
 
         })
+
 
 //        viewModel.queryNotFound.observe(this, Observer {
 //            when (it) {
@@ -172,6 +174,12 @@ class TrackerFragment : Fragment() {
 //                        ?: "", viewModel.sellerNon.value ?: "", viewModel.owed.value.toString()
 //                        ?: "", viewModel.owned.value.toString() ?: "")
 //            }
+        })
+
+        viewModel.state.observe(this, Observer {
+            if(!viewModel.listIsEmpty()){
+                adapter2.state = it ?: ApiState.DONE
+            }
         })
 
         viewModel.owed.observe(this, Observer {
