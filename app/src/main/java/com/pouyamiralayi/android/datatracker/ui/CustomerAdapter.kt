@@ -35,11 +35,11 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo:String
 
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-//    fun addHeaderAndSubmitList(list: List<Customer>, customerName: String, customerNo:String, owed: String, owned: String) {
+//    fun addHeaderAndSubmitList(list: List<Customer>, customerName: String, sellerNon:String, owed: String, owned: String) {
 //        adapterScope.launch {
 //            val items = when (list) {
-//                null -> (listOf(DataItem.Header(customerName, customerNo, owed, owned)))
-//                else -> (listOf(DataItem.Header(customerName, customerNo, owed, owned)) + list.map { DataItem.CustomerItem(it) })
+//                null -> (listOf(DataItem.Header(customerName, sellerNon, owed, owned)))
+//                else -> (listOf(DataItem.Header(customerName, sellerNon, owed, owned)) + list.map { DataItem.CustomerItem(it) })
 //            }
 //            withContext(Dispatchers.Main) {
 //                submitList(items)

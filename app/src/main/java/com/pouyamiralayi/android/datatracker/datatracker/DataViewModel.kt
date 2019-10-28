@@ -5,9 +5,7 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.pouyamiralayi.android.datatracker.database.Customer
 import com.pouyamiralayi.android.datatracker.database.Seller
-import com.pouyamiralayi.android.datatracker.network.ApiState
-import com.pouyamiralayi.android.datatracker.network.CustomerDataSource
-import com.pouyamiralayi.android.datatracker.network.CustomerDataSourceFactory
+import com.pouyamiralayi.android.datatracker.network.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -19,6 +17,8 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     /*Data Source*/
     private val customerDataSourceFactory: CustomerDataSourceFactory
     private val customersDataSource: LiveData<CustomerDataSource>
+    private val sellerDataSourceFactory: SellerDataSourceFactory
+    private val sellerDataSource: LiveData<SellerDataSource>
 
     /*Api*/
     val customers: LiveData<PagedList<Customer>>
@@ -32,11 +32,16 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     fun reload() {
         when (_customersScreen.value) {
             true -> searchCustomers("")
-            else -> fetchSellers()
+            else -> searchSellers("")
         }
     }
 
-    val sellers = MutableLiveData<PagedList<Seller>>()
+    val sellers : LiveData<PagedList<Seller>>
+    fun searchSellers(query: String) {
+        /*FIXME*/
+        customerDataSourceFactory.search(query)
+        customers.value?.dataSource?.invalidate()
+    }
     val state: LiveData<ApiState>
     val owed = MediatorLiveData<String>()
     val owned = MediatorLiveData<String>()
@@ -63,8 +68,10 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
         //creating data source factory
         customerDataSourceFactory = CustomerDataSourceFactory(jwt, customerNo)
+        sellerDataSourceFactory = SellerDataSourceFactory(jwt, customerNo)
         //getting the live data source from data source factory
         customersDataSource = customerDataSourceFactory.getCustomerLiveDataSource()
+        sellerDataSource = sellerDataSourceFactory.getSellerLiveDataSource()
         //Getting PagedList config
         val pagedListConfig = PagedList.Config.Builder()
                 .setEnablePlaceholders(false)
@@ -72,7 +79,9 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
                 .setPageSize(10)
                 .build()
 
+
         customers = LivePagedListBuilder(customerDataSourceFactory, pagedListConfig).build()
+        sellers = LivePagedListBuilder(sellerDataSourceFactory, pagedListConfig).build()
         state = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::state)
 
         owed.addSource(customers) {
@@ -109,27 +118,6 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         }
     }
 
-    private fun searchSellers(query: String) {
-//        coroutineScope.launch {
-//            val temp = mutableListOf<Seller>()
-//            sellers.value?.forEach {
-//                if (it.product.toLowerCase().contains(query) ||
-//                        it.productNo.toLowerCase().contains(query) ||
-//                        it.description.toLowerCase().contains(query) ||
-//                        it.rate.toLowerCase().contains(query) ||
-//                        it.firstUnit.toLowerCase().contains(query) ||
-//                        it.quantity.toLowerCase().contains(query)
-//                ) {
-//                    temp.add(it)
-//                }
-//            }
-//            if (temp.size > 0) {
-//                sellers.postValue(temp)
-//            } else {
-//                queryNotFound.postValue(true)
-//            }
-//        }
-    }
 
 
     override fun onCleared() {
@@ -138,25 +126,6 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     }
 
 
-    fun fetchSellers() {
-//        coroutineScope.launch {
-//
-//            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer ${jwt.value}", customerNo.value
-//                    ?: "")
-//            Log.i("Login", jwt.value)
-//            try {
-//                state.value = ApiState.LOADING
-//                val resultList = getCustomersDeferred.await()
-//                state.value = ApiState.DONE
-//                sellers.value = resultList
-//            } catch (t: Throwable) {
-//                state.value = ApiState.DONE
-////                fetchError.value = "خطا!"
-//                fetchError.value = t.message
-//                sellers.value = listOf()
-//            }
-//        }
-    }
 
 
     /*TODO*/

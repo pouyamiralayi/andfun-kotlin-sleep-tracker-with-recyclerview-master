@@ -169,7 +169,7 @@ class TrackerFragment : Fragment() {
             }
 //            it?.let {
 //                adapter.addHeaderAndSubmitList(it.snapshot(), viewModel.customerName.value
-//                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
+//                        ?: "", viewModel.sellerNon.value ?: "", viewModel.owed.value.toString()
 //                        ?: "", viewModel.owned.value.toString() ?: "")
 //            }
         })
@@ -181,7 +181,7 @@ class TrackerFragment : Fragment() {
 //            it?.let {
 //                adapter.addHeaderAndSubmitList(viewModel.customers.value?.snapshot()
 //                        ?: listOf(), viewModel.customerName.value
-//                        ?: "", viewModel.customerNo.value ?: "", it.toString()
+//                        ?: "", viewModel.sellerNon.value ?: "", it.toString()
 //                        ?: "", viewModel.owned.value.toString() ?: "")
 //            }
         })
@@ -193,7 +193,7 @@ class TrackerFragment : Fragment() {
 //            it?.let {
 //                adapter.addHeaderAndSubmitList(viewModel.customers.value?.snapshot()
 //                        ?: listOf(), viewModel.customerName.value
-//                        ?: "", viewModel.customerNo.value ?: "", viewModel.owed.value.toString()
+//                        ?: "", viewModel.sellerNon.value ?: "", viewModel.owed.value.toString()
 //                        ?: "", it.toString() ?: "")
 //            }
         })
