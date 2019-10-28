@@ -96,17 +96,17 @@ class TrackerFragment : Fragment() {
 
         })
 
-        viewModel.queryNotFound.observe(this, Observer {
-            when (it) {
-                true -> {
-                    Toast.makeText(context, "داده ای یافت نشد.", Toast.LENGTH_SHORT)
-                            .show()
-                    viewModel.onQueryNotFoundCompleted()
-                }
-                else -> null
-            }
-
-        })
+//        viewModel.queryNotFound.observe(this, Observer {
+//            when (it) {
+//                true -> {
+//                    Toast.makeText(context, "داده ای یافت نشد.", Toast.LENGTH_SHORT)
+//                            .show()
+//                    viewModel.onQueryNotFoundCompleted()
+//                }
+//                else -> null
+//            }
+//
+//        })
 
 
 
@@ -157,7 +157,7 @@ class TrackerFragment : Fragment() {
         }, viewModel.customerNo, viewModel.customerName)
         val adapter2 = SellerAdapter(SellerListener { sellerId ->
             /*TODO show a dialog of the description*/
-        })
+        }, viewModel.customerNo, viewModel.customerName)
 
 
         binding.customersList.adapter = adapter
@@ -201,7 +201,8 @@ class TrackerFragment : Fragment() {
 
         viewModel.sellers.observe(this, Observer {
             it?.let {
-                adapter2.addHeaderAndSubmitList(it, viewModel.customerName, viewModel.customerNo, "", "")
+                    adapter2.submitList(it)
+//                adapter2.addHeaderAndSubmitList(it, viewModel.customerName, viewModel.customerNo, "", "")
             }
         })
 

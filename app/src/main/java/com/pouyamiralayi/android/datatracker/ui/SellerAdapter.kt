@@ -3,6 +3,7 @@ package com.pouyamiralayi.android.datatracker.ui
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -18,31 +19,34 @@ private const val ITEM_VIEW_HEADER = 0
 private const val ITEM_VIEW_ITEM = 1
 
 
-class SellerAdapter(val clickListener: SellerListener) : ListAdapter<DataItemSeller, RecyclerView.ViewHolder>(SellerDiffCallback()) {
-
+class SellerAdapter(val clickListener: SellerListener, val customerNo: String, val customerName: String) : PagedListAdapter<Seller, RecyclerView.ViewHolder>(SellerDiffCallback()) {
+    var owed = ""
+    var owned = ""
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
-    fun addHeaderAndSubmitList(list: List<Seller>, customerName: String, customerNo: String, owed: String, owned: String) {
-        adapterScope.launch {
-            val items = when (list) {
-                null -> listOf(DataItemSeller.Header(customerName, customerNo, owed, owned))
-                else -> listOf(DataItemSeller.Header(customerName, customerNo, owed, owned)) + list.map { DataItemSeller.SellerItem(it) }
-            }
-            withContext(Dispatchers.Main) {
-                submitList(items)
-            }
-        }
-    }
+//    fun addHeaderAndSubmitList(list: List<Seller>, customerName: String, customerNo: String, owed: String, owned: String) {
+//        adapterScope.launch {
+//            val items = when (list) {
+//                null -> listOf(DataItemSeller.Header(customerName, customerNo, owed, owned))
+//                else -> listOf(DataItemSeller.Header(customerName, customerNo, owed, owned)) + list.map { DataItemSeller.SellerItem(it) }
+//            }
+//            withContext(Dispatchers.Main) {
+//                submitList(items)
+//            }
+//        }
+//    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolder -> {
-                val sellerItem = getItem(position) as DataItemSeller.SellerItem
-                holder.bind(sellerItem.seller, clickListener)
+                val sellerItem = getItem(position)
+                sellerItem?.let {
+                    holder.bind(sellerItem, clickListener)
+                }
             }
             is TextViewHolder -> {
-                val headerItem = getItem(position) as DataItemSeller.Header
-                holder.bind(headerItem.customerName, headerItem.customerNo, headerItem.owed, headerItem.owned)
+                val headerItem = getItem(position)
+                holder.bind(customerName, customerNo, owed, owned)
 
             }
         }
@@ -57,9 +61,9 @@ class SellerAdapter(val clickListener: SellerListener) : ListAdapter<DataItemSel
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is DataItemSeller.Header -> ITEM_VIEW_HEADER
-            is DataItemSeller.SellerItem -> ITEM_VIEW_ITEM
+        return when (position) {
+            0 -> ITEM_VIEW_HEADER
+            else -> ITEM_VIEW_ITEM
         }
     }
 
@@ -100,13 +104,13 @@ class SellerAdapter(val clickListener: SellerListener) : ListAdapter<DataItemSel
 
 }
 
-class SellerDiffCallback : DiffUtil.ItemCallback<DataItemSeller>() {
-    override fun areItemsTheSame(oldItem: DataItemSeller, newItem: DataItemSeller): Boolean {
+class SellerDiffCallback : DiffUtil.ItemCallback<Seller>() {
+    override fun areItemsTheSame(oldItem: Seller, newItem: Seller): Boolean {
         return oldItem.id == newItem.id
     }
 
     @SuppressLint("DiffUtilEquals")
-    override fun areContentsTheSame(oldItem: DataItemSeller, newItem: DataItemSeller): Boolean {
+    override fun areContentsTheSame(oldItem: Seller, newItem: Seller): Boolean {
         return oldItem == newItem
     }
 
