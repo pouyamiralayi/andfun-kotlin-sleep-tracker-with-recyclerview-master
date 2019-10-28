@@ -16,16 +16,16 @@
 
 <resources>
     <integer-array name="gplus_colors">
-        <item>@color/colorAmber_A400</item>
-        <item>@color/colorAmber_900</item>
         <item>@color/colorRed_A400</item>
         <item>@color/colorRed_900</item>
+        <item>@color/colorAmber_900</item>
+        <item>@color/colorAmber_A400</item>
         <item>@color/colorPurple_A400</item>
         <item>@color/colorPurple_900</item>
     </integer-array>
-    <color name="colorPrimary">#6ab343</color>
-    <color name="colorPrimaryDark">#388310</color>
-    <color name="colorAccent">#6ab343</color>
+    <color name="colorPrimary">@color/colorRed_A400</color>
+    <color name="colorPrimaryDark">@color/colorRed_900</color>
+    <color name="colorAccent">@color/colorPurple_A400</color>
 
     <color name="green_color">#388310</color>
     <color name="white_text_color">#f0f0f0</color>

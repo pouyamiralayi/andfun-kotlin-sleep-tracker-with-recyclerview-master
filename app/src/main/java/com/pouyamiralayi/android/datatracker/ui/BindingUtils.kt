@@ -23,6 +23,7 @@ import androidx.databinding.BindingAdapter
 import com.pouyamiralayi.android.datatracker.R
 import com.pouyamiralayi.android.datatracker.database.Customer
 import android.view.View
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.pouyamiralayi.android.datatracker.database.Seller
 import com.pouyamiralayi.android.datatracker.network.ApiState
 import saman.zamani.persiandate.PersianDateFormat
@@ -31,14 +32,14 @@ import saman.zamani.persiandate.PersianDateFormat
 @BindingAdapter("customerImage")
 fun ImageView.setCustomerImage(item: Customer?) {
     item?.let {
-        setImageResource(when (item.owed) {
+        setImageDrawable(when (item.owed) {
 //             -> R.drawable.ic_sleep_0
-            "0" -> R.drawable.ic_sleep_1
+            "0" -> VectorDrawableCompat.create(resources, R.drawable.ic_sleep_1, null)
 //            2 -> R.drawable.ic_sleep_2
 //            3 -> R.drawable.ic_sleep_3
 //            4 -> R.drawable.ic_sleep_4
 //            5 -> R.drawable.ic_sleep_5
-            else -> R.drawable.ic_sleep_5
+            else -> VectorDrawableCompat.create(resources, R.drawable.ic_sleep_5, null)
         })
     }
 }
@@ -133,16 +134,17 @@ fun ImageView.setBindState(state: ApiState?) {
         when (state) {
             ApiState.LOADING -> {
                 visibility = View.VISIBLE
-                setImageResource(R.drawable.loading_animation)
+                VectorDrawableCompat.create(resources, R.drawable.loading_animation, null)
             }
             ApiState.DISCONNECTED -> {
                 visibility = View.VISIBLE
-                setImageResource(R.drawable.ic_connection_error)
+                VectorDrawableCompat.create(resources, R.drawable.ic_connection_error, null)
             }
 
             ApiState.DONE -> {
                 visibility = View.GONE
             }
+            else -> visibility = View.GONE
     }
 
 
@@ -154,7 +156,7 @@ fun ImageView.setBindStateLogin(state: ApiState) {
     when (state) {
         ApiState.LOADING -> {
             visibility = View.VISIBLE
-            setImageResource(R.drawable.loading_animation)
+            VectorDrawableCompat.create(resources, R.drawable.loading_animation, null)
         }
         ApiState.ERROR -> {
             visibility = View.GONE

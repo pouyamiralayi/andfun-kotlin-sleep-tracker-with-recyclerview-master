@@ -27,7 +27,8 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo: Strin
     var state: ApiState = ApiState.DONE
         set(value) {
             field = value
-            notifyItemChanged(super.getItemCount() - 1)
+            notifyDataSetChanged()
+//            notifyItemChanged(super.getItemCount())
         }
 
     var owed = "0"

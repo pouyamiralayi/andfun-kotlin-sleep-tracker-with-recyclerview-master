@@ -56,8 +56,8 @@
             android:id="@+id/customers_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
             android:layoutDirection="rtl"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/down"
@@ -70,8 +70,8 @@
             android:id="@+id/sellers_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
             android:layoutDirection="rtl"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/down"
@@ -95,7 +95,8 @@
             app:layout_constraintBaseline_toBaselineOf="@id/stop_button"
             app:layout_constraintEnd_toStartOf="@+id/stop_button"
             app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="@dimen/margin" />
 
         <Button
             android:id="@+id/stop_button"
@@ -112,7 +113,8 @@
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/start_button"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="@dimen/margin" />
 
         <ImageButton
             android:id="@+id/down"
@@ -121,16 +123,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
             android:layout_marginEnd="@dimen/margin"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_button_red"
             android:fontFamily="@font/shabnam_medium"
             android:padding="8dp"
-            app:srcCompat="@drawable/ic_down"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.953"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_down" />
 
         <ImageButton
             android:id="@+id/up"
@@ -139,16 +141,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
             android:layout_marginEnd="@dimen/margin"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_button_red"
-            app:srcCompat="@drawable/ic_up"
             android:fontFamily="@font/shabnam_medium"
             android:padding="8dp"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.05"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_up" />
 
         <ImageButton
             android:id="@+id/clear_button3"
@@ -157,16 +159,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin"
             android:layout_marginEnd="@dimen/margin"
-            android:layout_marginBottom="64dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/rounded_button_blue"
             android:fontFamily="@font/shabnam_medium"
             android:onClick="@{() -> viewModel.reload()}"
-            app:srcCompat="@drawable/ic_reload"
             android:padding="8dp"
             android:textColor="@color/white_text_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_reload" />
 
         <EditText
             android:id="@+id/query"

@@ -176,9 +176,16 @@ class TrackerFragment : Fragment() {
 //            }
         })
 
-        viewModel.state.observe(this, Observer {
+        viewModel.state.observe(this, Observer { state ->
             if(!viewModel.listIsEmpty()){
-                adapter2.state = it ?: ApiState.DONE
+                viewModel.customersScreen.value?.let {
+                    if(it){
+                        adapter.state = state ?: ApiState.DONE
+                    }
+                    else{
+                        adapter2.state = state ?: ApiState.DONE
+                    }
+                }
             }
         })
 

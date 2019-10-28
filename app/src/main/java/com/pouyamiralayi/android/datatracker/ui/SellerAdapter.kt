@@ -28,7 +28,8 @@ class SellerAdapter(val clickListener: SellerListener, val customerNo: String, v
     var state: ApiState = ApiState.DONE
         set(value) {
             field = value
-            notifyItemChanged(super.getItemCount()-1)
+            notifyDataSetChanged()
+//            notifyItemChanged(super.getItemCount())
         }
     /*these are not needed, just in case...*/
     var owed = ""
