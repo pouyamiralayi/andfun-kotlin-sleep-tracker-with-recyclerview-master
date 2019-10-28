@@ -4,17 +4,15 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.pouyamiralayi.android.datatracker.database.Customer
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import java.net.SocketTimeoutException
 
 
 @Suppress("unused")
 class CustomerDataSource(_jwt: String, _customerNo: String, _query:String) : PageKeyedDataSource<Int, Customer>() {
 
     private val query = _query
-    private val apiJob = Job()
+    private val apiJob = SupervisorJob()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
     val state = MutableLiveData<ApiState>()
@@ -40,7 +38,11 @@ class CustomerDataSource(_jwt: String, _customerNo: String, _query:String) : Pag
                 val resultList = getCustomersDeferred.await()
                 callback.onResult(resultList, null, _start + _limit)
                 state.postValue(ApiState.DONE)
-            } catch (t: Throwable) {
+            }
+            catch (e: SocketTimeoutException){
+                state.postValue(ApiState.ERROR)
+            }
+            catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
 //                fetchError.value = "خطا!"
 //                fetchError.value = t.message
@@ -62,7 +64,6 @@ class CustomerDataSource(_jwt: String, _customerNo: String, _query:String) : Pag
                 state.postValue(ApiState.LOADING)
                 val resultList = getCustomersDeferred.await()
                 callback.onResult(resultList, adjacentKey)
-
                 state.postValue(ApiState.DONE)
             } catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
@@ -73,8 +74,15 @@ class CustomerDataSource(_jwt: String, _customerNo: String, _query:String) : Pag
     }
 
     private suspend fun totalCount(): Int {
-        val getCustomersCountDeffered = StrapiApi.retrofitService.getCustomersCount("Bearer $jwt", customerNo)
-        return getCustomersCountDeffered.await()
+        var resultCount = -1
+        try {
+            val getCustomersCountDeffered = StrapiApi.retrofitService.getCustomersCount("Bearer $jwt", customerNo)
+            resultCount = getCustomersCountDeffered.await()
+        }
+        catch (t:Throwable){
+            state.postValue(ApiState.DONE)
+        }
+        return resultCount
     }
 
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Customer>) {
