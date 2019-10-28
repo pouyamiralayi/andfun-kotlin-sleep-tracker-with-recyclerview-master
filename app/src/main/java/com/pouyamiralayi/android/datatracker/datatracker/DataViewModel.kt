@@ -1,9 +1,7 @@
 package com.pouyamiralayi.android.datatracker.datatracker
 
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
-import androidx.paging.PageKeyedDataSource
 import androidx.paging.PagedList
 import com.pouyamiralayi.android.datatracker.database.Customer
 import com.pouyamiralayi.android.datatracker.database.Seller
@@ -14,11 +12,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import androidx.lifecycle.Transformations
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
-class DataViewModel(private val customerName: String, private val customerNo: String, private val jwt: String) : ViewModel() {
+class DataViewModel(val customerName: String, val customerNo: String, private val jwt: String) : ViewModel() {
 
     /*Data Source*/
     private val customerDataSourceFactory: CustomerDataSourceFactory
@@ -106,7 +102,6 @@ class DataViewModel(private val customerName: String, private val customerNo: St
         _customersScreen.value = false
     }
 
-    @Deprecated("use search** instead")
     fun query(query: String) {
         when (_customersScreen.value) {
             true -> searchCustomers(query)

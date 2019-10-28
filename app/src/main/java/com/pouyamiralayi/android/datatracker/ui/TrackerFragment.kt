@@ -154,7 +154,7 @@ class TrackerFragment : Fragment() {
             /*TODO show a dialog of the description*/
 //            Toast.makeText(context, "$customerId", Toast.LENGTH_SHORT)
 //                    .show()
-        }, viewModel.customerNo.value ?: "", viewModel.customerName.value ?: "")
+        }, viewModel.customerNo, viewModel.customerName)
         val adapter2 = SellerAdapter(SellerListener { sellerId ->
             /*TODO show a dialog of the description*/
         })
@@ -201,8 +201,7 @@ class TrackerFragment : Fragment() {
 
         viewModel.sellers.observe(this, Observer {
             it?.let {
-                adapter2.addHeaderAndSubmitList(it, viewModel.customerName.value
-                        ?: "", viewModel.customerNo.value ?: "", "", "")
+                adapter2.addHeaderAndSubmitList(it, viewModel.customerName, viewModel.customerNo, "", "")
             }
         })
 
