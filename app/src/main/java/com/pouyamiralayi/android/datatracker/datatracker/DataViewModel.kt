@@ -1,5 +1,6 @@
 package com.pouyamiralayi.android.datatracker.datatracker
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -43,14 +44,14 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         }
     }
 
-    fun fetchOwed() {
+    private fun fetchOwed() {
         coroutineScope.launch {
             val getCustomersOwed = StrapiApi.retrofitService.getOwed("Bearer $jwt", customerNo)
             try {
                 val result  =  getCustomersOwed.await()
-                owed.postValue(String.format("%,.0f", result.owed.toDouble()))
-                owned.postValue(String.format("%,.0f", result.owned.toDouble()))
-                rem.postValue(String.format("%,.0f", result.rem.toDouble()))
+                owed.postValue("بدهکار: "+String.format("%,.0f", result.owed.toDouble()))
+                owned.postValue("بستانکار: "+String.format("%,.0f", result.owned.toDouble()))
+                rem.postValue("مانده: "+String.format("%,.0f", result.rem.toDouble()))
                 plus.postValue(result.plus)
             } catch (e: SocketTimeoutException) {
 

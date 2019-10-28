@@ -42,6 +42,18 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo: Strin
             notifyItemChanged(0)
         }
 
+    var rem = "0"
+        set(value) {
+            field = value
+            notifyItemChanged(0)
+        }
+
+    var plus = true
+        set(value) {
+            field = value
+            notifyItemChanged(0)
+        }
+
     private fun hasFooter(): Boolean {
         return super.getItemCount() != 0 && (state == ApiState.LOADING || state == ApiState.ERROR)
     }
@@ -59,7 +71,7 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo: Strin
                 }
             }
             is TextViewHolder -> {
-                holder.bind(customerName, customerNo, owed, owned)
+                holder.bind(customerName, customerNo, owed, owned, rem, plus)
 
             }
             is SellerAdapter.FooterViewHolder -> {
@@ -105,11 +117,13 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo: Strin
     }
 
     class TextViewHolder private constructor(val binding: HeaderBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(customerName: String, customerNo: String, owed: String, owned: String) {
+        fun bind(customerName: String, customerNo: String, owed: String, owned: String, rem: String, plus:Boolean) {
             binding.customerName = customerName
             binding.customerNo = customerNo
             binding.customerOwed = owed
             binding.customerOwned = owned
+            binding.customerRem = rem
+            binding.plus = plus
         }
 
         companion object {

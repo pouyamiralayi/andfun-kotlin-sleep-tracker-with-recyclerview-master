@@ -62,6 +62,7 @@
     <string name="finYear">سال مالی:</string>
     <string name="owed">بدهکار:</string>
     <string name="owned">بستانکار:</string>
+    <string name="rem">مانده:</string>
     <string name="date">تاریخ:</string>
     <string name="expireDate">تاریخ انقضا:</string>
     <string name="productName">نام محصول:</string>

@@ -17,6 +17,7 @@
 package com.pouyamiralayi.android.datatracker.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -133,6 +134,18 @@ class TrackerFragment : Fragment() {
         viewModel.owned.observe(this, Observer {
             it?.let {
                 adapter.owned = it
+            }
+        })
+
+        viewModel.rem.observe(this, Observer {
+            it?.let {
+                adapter.rem = it
+            }
+        })
+
+        viewModel.plus.observe(this, Observer {
+            it?.let {
+                adapter.plus = it
             }
         })
 

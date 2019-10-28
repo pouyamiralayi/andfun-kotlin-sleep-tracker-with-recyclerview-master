@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
         <variable name="customerName" type="String"/>
         <variable name="customerNo" type="String"/>
         <variable name="customerOwed" type="String"/>
         <variable name="customerOwned" type="String"/>
+        <variable name="customerRem" type="String"/>
+        <variable name="plus" type="Boolean"/>
     </data>
 
     <LinearLayout
@@ -59,6 +61,18 @@
             android:text="@{customerOwned}"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/colorGreen_A400"
+            android:textDirection="rtl" />
+
+        <TextView
+            android:id="@+id/rem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/shabnam_medium"
+            android:padding="8dp"
+            android:text="@{customerRem}"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/colorGreen_A400"
+            app:remColor="@{plus}"
             android:textDirection="rtl" />
     </LinearLayout>
 </layout>

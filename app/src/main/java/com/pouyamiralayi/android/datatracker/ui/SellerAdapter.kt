@@ -34,6 +34,7 @@ class SellerAdapter(val clickListener: SellerListener, val customerNo: String, v
     /*these are not needed, just in case...*/
     var owed = ""
     var owned = ""
+
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
 

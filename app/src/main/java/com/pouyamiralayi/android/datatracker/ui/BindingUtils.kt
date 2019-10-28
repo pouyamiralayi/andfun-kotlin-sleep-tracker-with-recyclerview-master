@@ -24,7 +24,6 @@ import com.pouyamiralayi.android.datatracker.R
 import com.pouyamiralayi.android.datatracker.database.Customer
 import android.view.View
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
 import com.pouyamiralayi.android.datatracker.database.Seller
 import com.pouyamiralayi.android.datatracker.network.ApiState
 import saman.zamani.persiandate.PersianDateFormat
@@ -78,6 +77,15 @@ fun TextView.setOwedColor(item: Customer?) {
     when {
         item?.owed == null -> setTextColor(resources.getColor(R.color.gray_text_color))
         item.owed == "0" -> setTextColor(resources.getColor(R.color.gray_text_color))
+        else -> setTextColor(resources.getColor(R.color.colorRed_A400))
+    }
+}
+
+/*TODO*/
+@BindingAdapter("remColor")
+fun TextView.setRemColor(plus: Boolean) {
+    when {
+        plus -> setTextColor(resources.getColor(R.color.colorGreen_A400))
         else -> setTextColor(resources.getColor(R.color.colorRed_A400))
     }
 }
