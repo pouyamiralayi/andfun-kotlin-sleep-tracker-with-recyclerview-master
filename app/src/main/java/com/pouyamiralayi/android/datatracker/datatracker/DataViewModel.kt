@@ -42,20 +42,24 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         customerDataSourceFactory.search(query)
         customers.value?.dataSource?.invalidate()
     }
-    val state: LiveData<ApiState>
+    val state = MediatorLiveData<ApiState>()
+    private val stateCustomers: LiveData<ApiState>
+    private val stateSellers: LiveData<ApiState>
+    val fetchError = MediatorLiveData<String>()
+    val fetchErrorCustomers : LiveData<String>
+    val fetchErrorSellers : LiveData<String>
     val owed = MediatorLiveData<String>()
     val owned = MediatorLiveData<String>()
-    val fetchError = MutableLiveData<String>()
 
 
     /*Co-Routine*/
     private val apiJob = Job()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
-    val queryNotFound = MutableLiveData<Boolean>()
-    fun onQueryNotFoundCompleted() {
-        queryNotFound.value = false
-    }
+//    val queryNotFound = MutableLiveData<Boolean>()
+//    fun onQueryNotFoundCompleted() {
+//        queryNotFound.value = false
+//    }
 
 
     private val _customersScreen = MutableLiveData<Boolean>()
@@ -63,7 +67,7 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         get() = _customersScreen
 
     init {
-        queryNotFound.value = false
+//        queryNotFound.value = false
         _customersScreen.value = true
 
         //creating data source factory
@@ -82,7 +86,22 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
         customers = LivePagedListBuilder(customerDataSourceFactory, pagedListConfig).build()
         sellers = LivePagedListBuilder(sellerDataSourceFactory, pagedListConfig).build()
-        state = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::state)
+        stateCustomers = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::state)
+        stateSellers = Transformations.switchMap(sellerDataSourceFactory.getSellerLiveDataSource(), SellerDataSource::state)
+        state.addSource(stateCustomers){
+            state.value = stateCustomers.value
+        }
+        state.addSource(stateSellers){
+            state.value = stateSellers.value
+        }
+        fetchErrorSellers = Transformations.switchMap(sellerDataSourceFactory.getSellerLiveDataSource(), SellerDataSource::fetchError)
+        fetchErrorCustomers = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::fetchError)
+        fetchError.addSource(fetchErrorCustomers){
+            fetchError.value = fetchErrorCustomers.value
+        }
+        fetchError.addSource(fetchErrorSellers){
+            fetchError.value = fetchErrorSellers.value
+        }
 
         owed.addSource(customers) {
             coroutineScope.launch {

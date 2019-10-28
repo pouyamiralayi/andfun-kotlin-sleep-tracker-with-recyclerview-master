@@ -15,6 +15,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
     val state = MutableLiveData<ApiState>()
+    val fetchError = MutableLiveData<String>()
 
 
     val _limit = 10
@@ -23,6 +24,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
 
     init {
         state.postValue(ApiState.LOADING)
+        fetchError.postValue("")
     }
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Customer>) {
@@ -41,7 +43,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
             }
             catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
-//                fetchError.value = "خطا!"
+                fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
         }
@@ -64,7 +66,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
                 state.postValue(ApiState.DONE)
             } catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
-//                fetchError.value = "خطا!"
+                fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
         }
@@ -100,7 +102,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
                 state.postValue(ApiState.DONE)
             } catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
-//                fetchError.value = "خطا!"
+                fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
         }

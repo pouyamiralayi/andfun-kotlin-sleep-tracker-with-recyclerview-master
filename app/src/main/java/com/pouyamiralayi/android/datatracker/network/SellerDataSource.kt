@@ -15,7 +15,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
     val state = MutableLiveData<ApiState>()
-
+    val fetchError = MutableLiveData<String>()
 
     val _limit = 10
     private val _start = 0
@@ -23,6 +23,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
 
     init {
         state.postValue(ApiState.LOADING)
+        fetchError.postValue("")
     }
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Seller>) {
@@ -41,7 +42,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
             }
             catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
-//                fetchError.value = "خطا!"
+                fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
         }
@@ -64,7 +65,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
                 state.postValue(ApiState.DONE)
             } catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
-//                fetchError.value = "خطا!"
+                fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
         }
@@ -100,7 +101,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
                 state.postValue(ApiState.DONE)
             } catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
-//                fetchError.value = "خطا!"
+                fetchError.postValue("خطا!")
 //                fetchError.value = t.message
             }
         }
