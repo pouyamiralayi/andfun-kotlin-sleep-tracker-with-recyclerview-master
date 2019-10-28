@@ -8,15 +8,20 @@ import com.pouyamiralayi.android.datatracker.database.Customer
 
 private val customerLiveDataSource = MutableLiveData<CustomerDataSource>()
 
-class CustomerDataSourceFactory (val jwt:String, val customerNo:String): DataSource.Factory<Int, Customer>() {
+class CustomerDataSourceFactory(val jwt: String, val customerNo: String) : DataSource.Factory<Int, Customer>() {
+    private var query = ""
     override fun create(): DataSource<Int, Customer> {
-        val customerDataSource = CustomerDataSource(jwt, customerNo)
+        val customerDataSource = CustomerDataSource(jwt, customerNo, query)
         customerLiveDataSource.postValue(customerDataSource)
         return customerDataSource
     }
 
-fun getCustomerLiveDataSource(): LiveData<CustomerDataSource> {
-    return customerLiveDataSource
-}
+    fun search(query: String) {
+        this.query = query
+    }
+
+    fun getCustomerLiveDataSource(): LiveData<CustomerDataSource> {
+        return customerLiveDataSource
+    }
 
 }

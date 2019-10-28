@@ -14,45 +14,86 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import androidx.lifecycle.Transformations
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
-class DataViewModel(val customer_name: String, val customer_no: String, val _jwt: String) : ViewModel() {
+class DataViewModel(private val customerName: String, private val customerNo: String, private val jwt: String) : ViewModel() {
+
+    /*Data Source*/
+    private val customerDataSourceFactory: CustomerDataSourceFactory
+    private val customersDataSource: LiveData<CustomerDataSource>
+
+    /*Api*/
+    val customers: LiveData<PagedList<Customer>>
+
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun searchCustomers(query: String) {
+        customerDataSourceFactory.search(query)
+        customers.value?.dataSource?.invalidate()
+    }
+
+    fun reload() {
+        when (_customersScreen.value) {
+            true -> searchCustomers("")
+            else -> fetchSellers()
+        }
+    }
+
+    val sellers = MutableLiveData<PagedList<Seller>>()
+    val state: LiveData<ApiState>
+    val owed = MediatorLiveData<String>()
+    val owned = MediatorLiveData<String>()
+    val fetchError = MutableLiveData<String>()
 
 
-
-    val customerName = MutableLiveData<String>()
-    val customerNo = MutableLiveData<String>()
-    val jwt = MutableLiveData<String>()
-
-
+    /*Co-Routine*/
     private val apiJob = Job()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
-    val customers : LiveData<PagedList<Customer>>
-    val customersDataSource: LiveData<CustomerDataSource>
-    val sellers = MutableLiveData<PagedList<Seller>>()
-    val state : LiveData<ApiState>
-
-    val owed = MediatorLiveData<String>()
-    val owned = MediatorLiveData<String>()
-
-
-    val fetchError = MutableLiveData<String>()
-
     val queryNotFound = MutableLiveData<Boolean>()
-
     fun onQueryNotFoundCompleted() {
         queryNotFound.value = false
     }
+
 
     private val _customersScreen = MutableLiveData<Boolean>()
     val customersScreen: LiveData<Boolean>
         get() = _customersScreen
 
-    fun reload() {
-        when (_customersScreen.value) {
-            true -> fetchCustomers()
-            else -> fetchSellers()
+    init {
+        queryNotFound.value = false
+        _customersScreen.value = true
+
+        //creating data source factory
+        customerDataSourceFactory = CustomerDataSourceFactory(jwt, customerNo)
+        //getting the live data source from data source factory
+        customersDataSource = customerDataSourceFactory.getCustomerLiveDataSource()
+        //Getting PagedList config
+        val pagedListConfig = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                /*FIXME is 10 sufficient?*/
+                .setPageSize(10)
+                .build()
+
+        customers = LivePagedListBuilder(customerDataSourceFactory, pagedListConfig).build()
+        state = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::state)
+
+        owed.addSource(customers) {
+            coroutineScope.launch {
+                customers.value?.let {
+                    val res = it.map { it.owed?.toDouble() ?: 0.0 }.sum()
+                    owed.postValue(String.format("%,.0f", res.toDouble()))
+                }
+            }
+        }
+        owned.addSource(customers) {
+            coroutineScope.launch {
+                customers.value?.let {
+                    val res = it.map { it.owned?.toDouble() ?: 0.0 }.sum()
+                    owned.postValue(String.format("%,.0f", res.toDouble()))
+                }
+            }
         }
     }
 
@@ -65,6 +106,7 @@ class DataViewModel(val customer_name: String, val customer_no: String, val _jwt
         _customersScreen.value = false
     }
 
+    @Deprecated("use search** instead")
     fun query(query: String) {
         when (_customersScreen.value) {
             true -> searchCustomers(query)
@@ -94,89 +136,12 @@ class DataViewModel(val customer_name: String, val customer_no: String, val _jwt
 //        }
     }
 
-    private fun searchCustomers(query: String) {
-//        coroutineScope.launch {
-//            val temp = mutableListOf<Customer>()
-//            customers.value?.forEach {
-//                if (it.description.toLowerCase().contains(query)
-//                ) {
-//                    temp.add(it)
-//                }
-//            }
-//            if (temp.size > 0) {
-//                customers.postValue(temp)
-//            } else {
-//                queryNotFound.postValue(true)
-//            }
-//        }
-    }
 
     override fun onCleared() {
         super.onCleared()
         apiJob.cancel()
     }
 
-    init {
-//        state.value = ApiState.LOADING
-        queryNotFound.value = false
-        _customersScreen.value = true
-        customerName.value = customer_name
-        customerNo.value = customer_no
-        jwt.value = _jwt
-
-        val customerDataSourceFactory = CustomerDataSourceFactory(jwt.value ?: "", customerNo.value
-                ?: "")
-        //getting the live data source from data source factory
-        customersDataSource = customerDataSourceFactory.getCustomerLiveDataSource()
-        //Getting PagedList config
-        val pagedListConfig = PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                /*TODO*/
-                .setPageSize(10)
-                .build()
-
-        customers = LivePagedListBuilder(customerDataSourceFactory, pagedListConfig).build()
-        state = Transformations.switchMap(customerDataSourceFactory.getCustomerLiveDataSource(), CustomerDataSource::state)
-
-        owed.addSource(customers) {
-            coroutineScope.launch {
-                customers.value?.let {
-                    val res = it.map { it.owed?.toDouble() ?: 0.0 }.sum()
-                    owed.postValue(String.format("%,.0f", res.toDouble()))
-                }
-            }
-        }
-        owned.addSource(customers) {
-            coroutineScope.launch {
-                customers.value?.let {
-                    val res = it.map { it.owned?.toDouble() ?: 0.0 }.sum()
-                    owned.postValue(String.format("%,.0f", res.toDouble()))
-                }
-            }
-        }
-//        fetchCustomers()
-//        fetchSellers()
-    }
-
-    fun fetchCustomers() {
-//        coroutineScope.launch {
-//
-//            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer ${jwt.value}", customerNo.value
-//                    ?: "")
-//            Log.i("Login", jwt.value)
-//            try {
-//                state.value = ApiState.LOADING
-//                val resultList = getCustomersDeferred.await()
-//                state.value = ApiState.DONE
-//                customers.value = resultList
-//            } catch (t: Throwable) {
-//                state.value = ApiState.DONE
-//                customers.value = listOf()
-////                fetchError.value = "خطا!"
-//                fetchError.value = t.message
-//            }
-//        }
-    }
 
     fun fetchSellers() {
 //        coroutineScope.launch {

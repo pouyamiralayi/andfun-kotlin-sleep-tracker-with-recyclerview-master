@@ -11,8 +11,9 @@ import kotlinx.coroutines.launch
 
 
 @Suppress("unused")
-class CustomerDataSource(_jwt: String, _customerNo: String) : PageKeyedDataSource<Int, Customer>() {
+class CustomerDataSource(_jwt: String, _customerNo: String, _query:String) : PageKeyedDataSource<Int, Customer>() {
 
+    private val query = _query
     private val apiJob = Job()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
@@ -32,7 +33,7 @@ class CustomerDataSource(_jwt: String, _customerNo: String) : PageKeyedDataSourc
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Customer>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, _start, _limit)
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, _start, _limit, query)
             Log.i("Login", jwt)
             try {
                 state.postValue(ApiState.LOADING)
@@ -50,7 +51,7 @@ class CustomerDataSource(_jwt: String, _customerNo: String) : PageKeyedDataSourc
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Customer>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit)
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit, query)
             Log.i("Login", jwt)
             val adjacentKey = if (params.key < totalCount()) {
                 params.key + _limit
@@ -79,7 +80,7 @@ class CustomerDataSource(_jwt: String, _customerNo: String) : PageKeyedDataSourc
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Customer>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit)
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit, query)
             Log.i("Login", jwt)
             val adjacentKey = if (params.key >= _limit) {
                 params.key - _limit
