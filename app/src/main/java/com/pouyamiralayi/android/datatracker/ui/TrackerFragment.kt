@@ -110,10 +110,10 @@ class TrackerFragment : Fragment() {
 
 
 
-        viewModel.fetchError.observe(this, Observer { error ->
-            Toast.makeText(context, "$error", Toast.LENGTH_SHORT)
-                    .show()
-        })
+//        viewModel.fetchError.observe(this, Observer { error ->
+//            Toast.makeText(context, "$error", Toast.LENGTH_SHORT)
+//                    .show()
+//        })
 
 
         // Add an Observer on the state variable for showing a Snackbar message

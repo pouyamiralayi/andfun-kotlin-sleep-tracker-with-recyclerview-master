@@ -38,9 +38,8 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
     val sellers : LiveData<PagedList<Seller>>
     fun searchSellers(query: String) {
-        /*FIXME*/
-        customerDataSourceFactory.search(query)
-        customers.value?.dataSource?.invalidate()
+        sellerDataSourceFactory.search(query)
+        sellers.value?.dataSource?.invalidate()
     }
     val state = MediatorLiveData<ApiState>()
     private val stateCustomers: LiveData<ApiState>
