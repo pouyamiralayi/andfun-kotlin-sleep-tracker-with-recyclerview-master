@@ -1,10 +1,7 @@
 package com.pouyamiralayi.android.datatracker.network
 
-import com.pouyamiralayi.android.datatracker.database.Customer
-import com.pouyamiralayi.android.datatracker.database.LoginResp
-import com.pouyamiralayi.android.datatracker.database.Seller
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.pouyamiralayi.android.datatracker.database.OwedResponse
+import com.pouyamiralayi.android.datatracker.database.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
@@ -55,6 +52,10 @@ interface StrapiApiService {
     @FormUrlEncoded
     fun login(@Field("identifier") identifier: String, @Field("password") password: String):
             Deferred<LoginResp>
+
+    @GET("users/me")
+    fun auth(@Header("Authorization") token: String): Deferred<User>
+
 }
 
 object StrapiApi {

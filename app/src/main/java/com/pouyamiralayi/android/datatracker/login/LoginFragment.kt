@@ -12,14 +12,18 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.pouyamiralayi.android.datatracker.R
 import com.pouyamiralayi.android.datatracker.databinding.FragmentLoginBinding
+import com.pouyamiralayi.android.datatracker.network.CredentialManager
 
 class LoginFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val binding: FragmentLoginBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login,container, false)
         binding.lifecycleOwner = this
 
+
+
         val viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         binding.viewModel = viewModel
+
 
         viewModel.navigateToCustomers.observe(this, Observer {
             it?.let{
@@ -43,6 +47,9 @@ class LoginFragment : Fragment(){
             viewModel.password.value = binding.password.text.toString()
             viewModel.signIn()
         }
+
+        val token = CredentialManager.getCredentials(context)
+        viewModel.testAuth(token)
 
         return binding.root
     }

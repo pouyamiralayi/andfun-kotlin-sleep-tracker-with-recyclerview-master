@@ -7,6 +7,7 @@
         <variable
             name="viewModel"
             type="com.pouyamiralayi.android.datatracker.login.LoginViewModel" />
+        <import type="android.view.View"/>
     </data>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -53,6 +54,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:visibility="@{viewModel.showSplash ? View.GONE : View.VISIBLE}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="?actionBarSize"
@@ -65,6 +67,7 @@
 
             <EditText
                 android:id="@+id/username"
+                android:visibility="@{viewModel.showSplash ? View.GONE : View.VISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:layout_margin="20dp"
@@ -84,6 +87,7 @@
                 android:textSize="17sp" />
             <EditText
                 android:id="@+id/password"
+                android:visibility="@{viewModel.showSplash ? View.GONE : View.VISIBLE}"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
                 android:layout_margin="20dp"
@@ -104,6 +108,7 @@
 
             <Button
                 android:id="@+id/login"
+                android:visibility="@{viewModel.showSplash ? View.GONE : View.VISIBLE}"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
                 android:layout_marginTop="20dp"

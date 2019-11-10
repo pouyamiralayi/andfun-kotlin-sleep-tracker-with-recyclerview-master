@@ -10,7 +10,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel() : ViewModel() {
+    val showSplash = MutableLiveData<Boolean>()
+
     private val apiJob = Job()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
 
@@ -27,6 +29,24 @@ class LoginViewModel : ViewModel() {
 
     fun onNavigateToCustomersCompleted() {
         navigateToCustomers.value = false
+    }
+
+    fun testAuth(token: String?){
+        coroutineScope.launch {
+            val authDeffered = StrapiApi.retrofitService.auth(token ?: "")
+            try{
+                val res = authDeffered.await()
+                res.userName.toString()
+                jwt.postValue(token)
+                username.postValue(res.userName)
+                customer_name.postValue(res.email)
+                navigateToCustomers.postValue(true)
+            }
+            catch (e: Exception){
+                /*notify*/
+                showSplash.postValue(false)
+            }
+        }
     }
 
     fun signIn() {
@@ -57,6 +77,7 @@ class LoginViewModel : ViewModel() {
     }
 
     init {
+        showSplash.value = true
         jwt.value = ""
         navigateToCustomers.value = false
         state.value = ApiState.DONE

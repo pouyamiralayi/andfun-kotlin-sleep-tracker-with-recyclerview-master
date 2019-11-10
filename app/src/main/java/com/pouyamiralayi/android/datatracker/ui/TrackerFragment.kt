@@ -31,6 +31,7 @@ import com.pouyamiralayi.android.datatracker.datatracker.DataViewModel
 import com.pouyamiralayi.android.datatracker.datatracker.DataViewModelFactory
 import com.pouyamiralayi.android.datatracker.hideKeyboard
 import com.pouyamiralayi.android.datatracker.network.ApiState
+import com.pouyamiralayi.android.datatracker.network.CredentialManager
 
 class TrackerFragment : Fragment() {
 
@@ -48,6 +49,9 @@ class TrackerFragment : Fragment() {
         val args = arguments?.let {
             TrackerFragmentArgs.fromBundle(it)
         }
+
+        CredentialManager.saveCredentials(context, args?.jwt ?: "")
+
         val viewModelFactory = DataViewModelFactory(args?.customerName ?: "", args?.customerNo
                 ?: "", args?.jwt ?: "")
         val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DataViewModel::class.java)
