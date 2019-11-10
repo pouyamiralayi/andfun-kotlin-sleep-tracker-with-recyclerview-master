@@ -56,6 +56,8 @@
             android:id="@+id/action_loginFragment_to_sleep_tracker_fragment"
             app:destination="@id/sleep_tracker_fragment"
             app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popUpTo="@+id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

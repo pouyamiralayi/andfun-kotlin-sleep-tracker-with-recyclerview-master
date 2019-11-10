@@ -50,7 +50,8 @@ class TrackerFragment : Fragment() {
             TrackerFragmentArgs.fromBundle(it)
         }
 
-        CredentialManager.saveCredentials(context, args?.jwt ?: "")
+        CredentialManager.saveCredentials(context, args?.jwt)
+//        Log.i("TOKEN", args?.jwt ?: "No JWT!")
 
         val viewModelFactory = DataViewModelFactory(args?.customerName ?: "", args?.customerNo
                 ?: "", args?.jwt ?: "")

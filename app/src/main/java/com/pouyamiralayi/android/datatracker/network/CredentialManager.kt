@@ -3,8 +3,8 @@ package com.pouyamiralayi.android.datatracker.network
 import android.content.Context
 
 object CredentialManager {
-    private val ACCESS_TOKEN = "jwt"
-    private val PREFERENCE_NAME = "auth"
+    private const val ACCESS_TOKEN = "jwt"
+    private const val PREFERENCE_NAME = "auth"
 
     fun getCredentials(context: Context?): String? {
         return try {

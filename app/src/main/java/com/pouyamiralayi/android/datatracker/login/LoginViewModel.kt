@@ -29,11 +29,13 @@ class LoginViewModel() : ViewModel() {
 
     fun onNavigateToCustomersCompleted() {
         navigateToCustomers.value = false
+        showSplash.value = true
+        state.value  = ApiState.LOADING
     }
 
     fun testAuth(token: String?){
         coroutineScope.launch {
-            val authDeffered = StrapiApi.retrofitService.auth(token ?: "")
+            val authDeffered = StrapiApi.retrofitService.auth("Bearer $token")
             try{
                 val res = authDeffered.await()
                 res.userName.toString()
@@ -44,7 +46,9 @@ class LoginViewModel() : ViewModel() {
             }
             catch (e: Exception){
                 /*notify*/
+                Log.e("Auth",e.message)
                 showSplash.postValue(false)
+                state.postValue(ApiState.DONE)
             }
         }
     }
@@ -78,9 +82,9 @@ class LoginViewModel() : ViewModel() {
 
     init {
         showSplash.value = true
+        state.value = ApiState.LOADING
         jwt.value = ""
         navigateToCustomers.value = false
-        state.value = ApiState.DONE
         customer_name.value = ""
         username.value = ""
         password.value = ""
