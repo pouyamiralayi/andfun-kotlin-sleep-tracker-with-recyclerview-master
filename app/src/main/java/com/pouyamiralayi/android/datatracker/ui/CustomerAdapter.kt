@@ -54,8 +54,12 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo: Strin
             notifyItemChanged(0)
         }
 
+    override fun getItemCount(): Int {
+        return super.getItemCount() + 1
+    }
+
     private fun hasFooter(): Boolean {
-        return super.getItemCount() != 0 && (state == ApiState.LOADING || state == ApiState.ERROR)
+        return super.getItemCount() != 1 && (state == ApiState.LOADING || state == ApiState.ERROR)
     }
 
 
@@ -65,7 +69,7 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo: Strin
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolder -> {
-                val customerItem = getItem(position)
+                val customerItem = getItem(position - 1)
                 customerItem?.let {
                     holder.bind(customerItem, clickListener)
                 }
@@ -93,9 +97,8 @@ class CustomerAdapter(val clickListener: CustomerListener, val customerNo: Strin
     override fun getItemViewType(position: Int): Int {
         return when {
             position == 0 -> ITEM_VIEW_HEADER
-            hasFooter() && position == super.getItemCount() - 1 -> ITEM_VIEW_FOOTER
-            position < super.getItemCount() -> ITEM_VIEW_ITEM
-            else -> -1
+            hasFooter() && position == getItemCount() - 2 -> ITEM_VIEW_FOOTER
+            else -> ITEM_VIEW_ITEM
         }
     }
 

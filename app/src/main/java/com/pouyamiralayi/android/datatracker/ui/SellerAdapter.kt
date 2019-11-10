@@ -38,15 +38,18 @@ class SellerAdapter(val clickListener: SellerListener, val customerNo: String, v
     private val adapterScope = CoroutineScope(Dispatchers.Default)
 
 
-
     private fun hasFooter(): Boolean {
-        return super.getItemCount() != 0 && (state == ApiState.LOADING || state == ApiState.ERROR)
+        return getItemCount() != 1 && (state == ApiState.LOADING || state == ApiState.ERROR)
+    }
+
+    override fun getItemCount(): Int {
+        return (super.getItemCount() + 1)
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ViewHolder -> {
-                val sellerItem = getItem(position)
+                val sellerItem = getItem(position - 1)
                 sellerItem?.let {
                     holder.bind(sellerItem, clickListener)
                 }
@@ -73,9 +76,8 @@ class SellerAdapter(val clickListener: SellerListener, val customerNo: String, v
     override fun getItemViewType(position: Int): Int {
         return when {
             position == 0 -> ITEM_VIEW_HEADER
-            hasFooter() && position == super.getItemCount() - 1 -> ITEM_VIEW_FOOTER
-            position < super.getItemCount() -> ITEM_VIEW_ITEM
-            else -> -1
+            hasFooter() && position == getItemCount() - 2 -> ITEM_VIEW_FOOTER
+            else -> ITEM_VIEW_ITEM
         }
     }
 
