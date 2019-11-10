@@ -34,7 +34,13 @@ class LoginViewModel() : ViewModel() {
     }
 
     fun testAuth(token: String?){
+        if(token == null){
+            showSplash.value = false
+            state.value = ApiState.DONE
+            return
+        }
         coroutineScope.launch {
+//            Log.e("JWT", "Bearer $token")
             val authDeffered = StrapiApi.retrofitService.auth("Bearer $token")
             try{
                 val res = authDeffered.await()
@@ -46,7 +52,7 @@ class LoginViewModel() : ViewModel() {
             }
             catch (e: Exception){
                 /*notify*/
-                Log.e("Auth",e.message)
+                Log.e("Auth",e.message ?: "")
                 showSplash.postValue(false)
                 state.postValue(ApiState.DONE)
             }
