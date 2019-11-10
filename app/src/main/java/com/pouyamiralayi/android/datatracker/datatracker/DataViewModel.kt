@@ -34,6 +34,8 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         customers.value?.dataSource?.invalidate()
     }
 
+
+
     fun reload() {
         when (_customersScreen.value) {
             true -> {

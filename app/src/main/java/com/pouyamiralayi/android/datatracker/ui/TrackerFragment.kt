@@ -25,6 +25,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.pouyamiralayi.android.datatracker.R
 import com.pouyamiralayi.android.datatracker.databinding.FragmentSleepTrackerBinding
 import com.pouyamiralayi.android.datatracker.datatracker.DataViewModel
@@ -86,6 +87,11 @@ class TrackerFragment : Fragment() {
                             ?: 0)
                 }
             }
+        }
+
+        binding.logout.setOnClickListener{
+            CredentialManager.saveCredentials(context, "")
+            findNavController().navigate(TrackerFragmentDirections.actionSleepTrackerFragmentToLoginFragment())
         }
 
         viewModel.customersScreen.observe(this, Observer {
