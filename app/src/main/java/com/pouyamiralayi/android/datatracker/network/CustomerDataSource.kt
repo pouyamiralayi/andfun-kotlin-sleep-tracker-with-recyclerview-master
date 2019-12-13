@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException
 
 
 @Suppress("unused")
-class CustomerDataSource(val jwt: String, val customerNo: String, val query:String) : PageKeyedDataSource<Int, Customer>() {
+class CustomerDataSource(val jwt: String, val customerNo: String, val query: String, val dateFrom: String?, val dateTo: String?) : PageKeyedDataSource<Int, Customer>() {
 
     private val apiJob = SupervisorJob()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
@@ -30,18 +30,17 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Customer>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, _start, _limit, query)
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, _start, _limit, query, dateFrom, dateTo)
+            Log.i("customer request", "$dateFrom -- $dateTo")
             Log.i("Login", jwt)
             try {
                 state.postValue(ApiState.LOADING)
                 val resultList = getCustomersDeferred.await()
                 callback.onResult(resultList, null, _start + _limit)
                 state.postValue(ApiState.DONE)
-            }
-            catch (e: SocketTimeoutException){
+            } catch (e: SocketTimeoutException) {
                 state.postValue(ApiState.ERROR)
-            }
-            catch (t: Throwable) {
+            } catch (t: Throwable) {
                 state.postValue(ApiState.DONE)
                 fetchError.postValue("خطا!")
 //                fetchError.value = t.message
@@ -52,7 +51,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Customer>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit, query)
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit, query, dateFrom, dateTo)
             Log.i("Login", jwt)
             val adjacentKey = if (params.key < totalCount()) {
                 params.key + _limit
@@ -77,8 +76,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
         try {
             val getCustomersCountDeffered = StrapiApi.retrofitService.getCustomersCount("Bearer $jwt", customerNo)
             resultCount = getCustomersCountDeffered.await()
-        }
-        catch (t:Throwable){
+        } catch (t: Throwable) {
             state.postValue(ApiState.DONE)
         }
         return resultCount
@@ -87,7 +85,7 @@ class CustomerDataSource(val jwt: String, val customerNo: String, val query:Stri
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Customer>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit, query)
+            val getCustomersDeferred = StrapiApi.retrofitService.getCustomers("Bearer $jwt", customerNo, params.key, _limit, query, dateFrom, dateTo)
             Log.i("Login", jwt)
             val adjacentKey = if (params.key >= _limit) {
                 params.key - _limit

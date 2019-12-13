@@ -50,7 +50,7 @@ class LoginFragment : Fragment(){
         }
 
         val token = CredentialManager.getCredentials(context)
-//        Log.i("TOKEN", token ?: "")
+        Log.i("TOKEN", token ?: "")
         viewModel.testAuth(token)
 
         return binding.root

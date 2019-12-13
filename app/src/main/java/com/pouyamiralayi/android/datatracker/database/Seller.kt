@@ -1,7 +1,9 @@
 package com.pouyamiralayi.android.datatracker.database
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
+@Keep
 data class Seller(
         var id : Int = 0,
         @field:Json(name = "fin_year") var finYear: String = "",

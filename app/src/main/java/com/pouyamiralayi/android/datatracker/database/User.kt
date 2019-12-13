@@ -1,7 +1,9 @@
 package com.pouyamiralayi.android.datatracker.database
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
+@Keep
 data class User(
         @field:Json(name = "username") val userName: String,
         val id: Int,

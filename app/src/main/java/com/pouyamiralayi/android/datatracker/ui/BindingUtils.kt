@@ -23,8 +23,10 @@ import androidx.databinding.BindingAdapter
 import com.pouyamiralayi.android.datatracker.R
 import com.pouyamiralayi.android.datatracker.database.Customer
 import android.view.View
+import android.widget.Button
 import androidx.appcompat.content.res.AppCompatResources
 import com.pouyamiralayi.android.datatracker.database.Seller
+import com.pouyamiralayi.android.datatracker.datatracker.DataViewModel
 import com.pouyamiralayi.android.datatracker.network.ApiState
 import saman.zamani.persiandate.PersianDateFormat
 
@@ -123,9 +125,10 @@ fun TextView.setDate(date: String?) {
     }
 }
 
+
 @BindingAdapter("exdate")
 fun TextView.setExDate(date: String?) {
-    date?.let{
+    date?.let {
         try {
             val splitted = date.split('T')[0]
             val persianDateFormat = PersianDateFormat("yyyy-MM-dd")
@@ -139,22 +142,22 @@ fun TextView.setExDate(date: String?) {
 
 @BindingAdapter("bindState")
 fun ImageView.setBindState(state: ApiState?) {
-    state?.let{
+    state?.let {
         when (state) {
             ApiState.LOADING -> {
                 visibility = View.VISIBLE
-                setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.loading_animation))
+                setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.loading_animation))
             }
             ApiState.DISCONNECTED -> {
                 visibility = View.VISIBLE
-                setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.ic_connection_error))
+                setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.ic_connection_error))
             }
 
             ApiState.DONE -> {
                 visibility = View.GONE
             }
             else -> visibility = View.GONE
-    }
+        }
 
 
     }
@@ -165,7 +168,7 @@ fun ImageView.setBindStateLogin(state: ApiState) {
     when (state) {
         ApiState.LOADING -> {
             visibility = View.VISIBLE
-            setImageDrawable(AppCompatResources.getDrawable(context,R.drawable.loading_animation))
+            setImageDrawable(AppCompatResources.getDrawable(context, R.drawable.loading_animation))
         }
         ApiState.ERROR -> {
             visibility = View.GONE
@@ -174,5 +177,24 @@ fun ImageView.setBindStateLogin(state: ApiState) {
         ApiState.DONE -> {
             visibility = View.GONE
         }
+    }
+}
+
+@BindingAdapter("btnFromText")
+fun Button.setBtnFromText(dateFrom: String?) {
+    text = if (dateFrom == null || dateFrom.isEmpty()) {
+
+        ("از تاریخ")
+    } else {
+        dateFrom
+    }
+}
+
+@BindingAdapter("btnToText")
+fun Button.setBtnToText(dateTo: String?) {
+    text = if (dateTo == null || dateTo.isEmpty()) {
+        ("تا تاریخ")
+    } else {
+        dateTo
     }
 }

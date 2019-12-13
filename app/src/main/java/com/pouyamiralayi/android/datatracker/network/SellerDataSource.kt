@@ -9,7 +9,7 @@ import java.net.SocketTimeoutException
 
 
 @Suppress("unused")
-class SellerDataSource(val jwt: String, val sellerNon: String, private val query: String) : PageKeyedDataSource<Int, Seller>() {
+class SellerDataSource(val jwt: String, val sellerNon: String, private val query: String, private val dateFrom: String?, private val dateTo: String?) : PageKeyedDataSource<Int, Seller>() {
 
     private val apiJob = SupervisorJob()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
@@ -29,7 +29,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Seller>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer $jwt", sellerNon, _start, _limit, query)
+            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer $jwt", sellerNon, _start, _limit, query, dateFrom, dateTo)
             Log.i("Login", jwt)
             try {
                 state.postValue(ApiState.LOADING)
@@ -49,7 +49,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
     override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, Seller>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer $jwt", sellerNon, params.key, _limit, query)
+            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer $jwt", sellerNon, params.key, _limit, query, dateFrom, dateTo)
             Log.i("Login", jwt)
             val adjacentKey = if (params.key < totalCount()) {
                 params.key + _limit
@@ -85,7 +85,7 @@ class SellerDataSource(val jwt: String, val sellerNon: String, private val query
     override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, Seller>) {
         coroutineScope.launch {
 
-            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer $jwt", sellerNon, params.key, _limit, query)
+            val getCustomersDeferred = StrapiApi.retrofitService.getSellers("Bearer $jwt", sellerNon, params.key, _limit, query, dateFrom, dateTo)
             Log.i("Login", jwt)
             val adjacentKey = if (params.key >= _limit) {
                 params.key - _limit

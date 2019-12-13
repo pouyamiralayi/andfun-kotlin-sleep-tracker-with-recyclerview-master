@@ -1,6 +1,10 @@
 package com.pouyamiralayi.android.datatracker.database
 
+import androidx.annotation.Keep
+import com.squareup.moshi.Json
+
+@Keep
 data class LoginResp(
-        val jwt: String,
-        val user: User
+        @field:Json(name = "jwt") val jwt: String,
+        @field:Json(name = "user") val user: User
 )

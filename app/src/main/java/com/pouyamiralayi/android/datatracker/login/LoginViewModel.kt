@@ -70,6 +70,7 @@ class LoginViewModel() : ViewModel() {
             coroutineScope.launch {
                 val loginDeferred = StrapiApi.retrofitService.login(username.value
                         ?: "", password.value ?: "")
+                Log.i("login", username.value)
                 try {
                     state.value = ApiState.LOADING
                     val res = loginDeferred.await()

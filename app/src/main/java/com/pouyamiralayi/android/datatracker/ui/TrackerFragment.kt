@@ -33,11 +33,26 @@ import com.pouyamiralayi.android.datatracker.datatracker.DataViewModelFactory
 import com.pouyamiralayi.android.datatracker.hideKeyboard
 import com.pouyamiralayi.android.datatracker.network.ApiState
 import com.pouyamiralayi.android.datatracker.network.CredentialManager
+import android.widget.Toast
+import ir.hamsaa.persiandatepicker.util.PersianCalendar
+import ir.hamsaa.persiandatepicker.PersianDatePickerDialog
+import android.R.attr.typeface
+import android.graphics.Color
+import android.graphics.Typeface
+import ir.hamsaa.persiandatepicker.Listener
+import saman.zamani.persiandate.PersianDate
+import saman.zamani.persiandate.PersianDateFormat
+
 
 class TrackerFragment : Fragment() {
-
+    lateinit var pickerFrom: PersianDatePickerDialog
+    lateinit var pickerTo: PersianDatePickerDialog
+    lateinit var viewModel: DataViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
+
+        pickerInit()
 
         // Get a reference to the binding object and inflate the fragment views.
         val binding: FragmentSleepTrackerBinding = DataBindingUtil.inflate(
@@ -56,7 +71,7 @@ class TrackerFragment : Fragment() {
 
         val viewModelFactory = DataViewModelFactory(args?.customerName ?: "", args?.customerNo
                 ?: "", args?.jwt ?: "")
-        val viewModel = ViewModelProviders.of(this, viewModelFactory).get(DataViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(DataViewModel::class.java)
 
         binding.viewModel = viewModel
 
@@ -81,15 +96,23 @@ class TrackerFragment : Fragment() {
         binding.down.setOnClickListener {
             viewModel.customersScreen.value?.let {
                 when (it) {
-                    true -> binding.customersList.scrollToPosition(viewModel.customers.value?.size?.minus(1)
+                    true -> binding.customersList.scrollToPosition(viewModel.customers.value?.size
                             ?: 0)
-                    else -> binding.sellersList.scrollToPosition(viewModel.sellers.value?.size?.minus(1)
+                    else -> binding.sellersList.scrollToPosition(viewModel.sellers.value?.size
                             ?: 0)
                 }
             }
         }
 
-        binding.logout.setOnClickListener{
+        binding.fromDateBtn.setOnClickListener {
+            pickerFrom.show()
+        }
+
+        binding.toDateBtn.setOnClickListener {
+            pickerTo.show()
+        }
+
+        binding.logout.setOnClickListener {
             CredentialManager.saveCredentials(context, "")
             findNavController().navigate(TrackerFragmentDirections.actionSleepTrackerFragmentToLoginFragment())
         }
@@ -105,7 +128,14 @@ class TrackerFragment : Fragment() {
                     binding.sellersList.visibility = View.VISIBLE
                 }
             }
-
+            viewModel.dateFrom.value = null
+            viewModel.dateFromPersian.value = null
+            viewModel.dateTo.value = null
+            viewModel.dateToPersian.value = null
+            if(binding.query.text.isNotEmpty()){
+                binding.query.setText("")
+                viewModel.reload()
+            }
         })
 
 
@@ -168,5 +198,92 @@ class TrackerFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    private fun pickerInit() {
+        pickerFrom = PersianDatePickerDialog(context)
+                .setPositiveButtonString("باشه")
+                .setNegativeButton("بیخیال")
+                .setTodayButton("امروز")
+                .setTodayButtonVisible(true)
+                .setMinYear(1300)
+                .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                .setActionTextColor(Color.GRAY)
+                .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                .setListener(object : Listener {
+                    override fun onDateSelected(persianCalendar: PersianCalendar) {
+                        try {
+                            val persianDate = persianCalendar.persianYear.toString() + "/" + persianCalendar.persianMonth + "/" + persianCalendar.persianDay
+                            Log.i("picker", persianDate)
+                            val pd = PersianDate()
+                            pd.shDay = persianCalendar.persianDay
+                            pd.shMonth = persianCalendar.persianMonth
+                            pd.shYear = persianCalendar.persianYear
+                            var grgDate = pd.grgYear.toString() + "/"
+                            if (pd.grgMonth < 10) {
+                                grgDate += "0" + pd.grgMonth.toString() + "/"
+                            } else {
+                                grgDate += pd.grgMonth.toString() + "/"
+                            }
+                            if (pd.grgDay < 10) {
+                                grgDate += "0" + pd.grgDay.toString()
+                            } else {
+                                grgDate += pd.grgDay.toString()
+                            }
+                            Log.i("picker", grgDate)
+                            viewModel.dateFrom.value = grgDate
+                            viewModel.dateFromPersian.value = pd.shYear.toString() + "/" + pd.shMonth + "/" + pd.shDay
+
+                            //                            Toast.makeText(context, PersianDateFormat.format(pd, "l j F Y"), Toast.LENGTH_SHORT).show()
+                        } catch (e: Exception) {
+                            Log.e("picker", e.toString())
+                        }
+                    }
+
+                    override fun onDismissed() {
+
+                    }
+                })
+        pickerTo = PersianDatePickerDialog(context)
+                .setPositiveButtonString("باشه")
+                .setNegativeButton("بیخیال")
+                .setTodayButton("امروز")
+                .setTodayButtonVisible(true)
+                .setMinYear(1300)
+                .setMaxYear(PersianDatePickerDialog.THIS_YEAR)
+                .setActionTextColor(Color.GRAY)
+                .setTitleType(PersianDatePickerDialog.WEEKDAY_DAY_MONTH_YEAR)
+                .setListener(object : Listener {
+                    override fun onDateSelected(persianCalendar: PersianCalendar) {
+                        try {
+                            val persianDate = persianCalendar.persianYear.toString() + "/" + persianCalendar.persianMonth + "/" + persianCalendar.persianDay
+                            Log.i("picker", persianDate)
+                            val pd = PersianDate()
+                            pd.shDay = persianCalendar.persianDay
+                            pd.shMonth = persianCalendar.persianMonth
+                            pd.shYear = persianCalendar.persianYear
+                            var grgDate = pd.grgYear.toString() + "/"
+                            if (pd.grgMonth < 10) {
+                                grgDate += "0" + pd.grgMonth.toString() + "/"
+                            } else {
+                                grgDate += pd.grgMonth.toString() + "/"
+                            }
+                            if (pd.grgDay < 10) {
+                                grgDate += "0" + pd.grgDay.toString()
+                            } else {
+                                grgDate += pd.grgDay.toString()
+                            }
+                            Log.i("picker", grgDate)
+                            viewModel.dateTo.value = grgDate
+                            viewModel.dateToPersian.value = pd.shYear.toString() + "/" + pd.shMonth + "/" + pd.shDay
+                        } catch (e: Exception) {
+                            Log.e("picker", e.toString())
+                        }
+                    }
+
+                    override fun onDismissed() {
+
+                    }
+                })
     }
 }

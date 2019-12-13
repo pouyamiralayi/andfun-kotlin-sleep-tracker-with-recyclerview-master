@@ -90,6 +90,9 @@ dependencies {
     /*Date*/
     implementation 'com.github.samanzamani.persiandate:PersianDate:0.7'
 
+    /*DatePicker*/
+    implementation 'com.github.aliab:Persian-Date-Picker-Dialog:1.5.1'
+
 
     /*Paging*/
     testImplementation "androidx.paging:paging-common-ktx:$paging_version" // For Kotlin use paging-common-ktx

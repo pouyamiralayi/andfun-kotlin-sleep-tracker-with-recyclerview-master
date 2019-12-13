@@ -28,21 +28,30 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     val rem = MutableLiveData<String>()
     val plus = MutableLiveData<Boolean>()
 
+    /*Date Query*/
+    val dateFrom = MutableLiveData<String?>()
+    val dateFromPersian = MutableLiveData<String?>()
+    val dateTo = MutableLiveData<String?>()
+    val dateToPersian = MutableLiveData<String?>()
+
     @Suppress("MemberVisibilityCanBePrivate")
-    fun searchCustomers(query: String) {
-        customerDataSourceFactory.search(query)
+    fun searchCustomers(query: String, dateFrom: String?, dateTo: String?) {
+        customerDataSourceFactory.search(query, dateFrom, dateTo)
         customers.value?.dataSource?.invalidate()
     }
 
 
-
     fun reload() {
+        dateFrom.value = null
+        dateFromPersian.value = null
+        dateTo.value = null
+        dateToPersian.value = null
         when (_customersScreen.value) {
             true -> {
-                searchCustomers("")
+                searchCustomers("", dateFrom.value, dateTo.value)
                 fetchOwed()
             }
-            else -> searchSellers("")
+            else -> searchSellers("", dateFrom.value, dateTo.value)
         }
     }
 
@@ -50,10 +59,10 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         coroutineScope.launch {
             val getCustomersOwed = StrapiApi.retrofitService.getOwed("Bearer $jwt", customerNo)
             try {
-                val result  =  getCustomersOwed.await()
-                owed.postValue("بدهکار: "+String.format("%,.0f", result.owed.toDouble()))
-                owned.postValue("بستانکار: "+String.format("%,.0f", result.owned.toDouble()))
-                rem.postValue("مانده: "+String.format("%,.0f", result.rem.toDouble()))
+                val result = getCustomersOwed.await()
+                owed.postValue("بدهکار: " + String.format("%,.0f", result.owed.toDouble()))
+                owned.postValue("بستانکار: " + String.format("%,.0f", result.owned.toDouble()))
+                rem.postValue("مانده: " + String.format("%,.0f", result.rem.toDouble()))
                 plus.postValue(result.plus)
             } catch (e: SocketTimeoutException) {
 
@@ -73,8 +82,8 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     val sellers: LiveData<PagedList<Seller>>
     val fetchErrorSellers: LiveData<String>
     private val stateSellers: LiveData<ApiState>
-    fun searchSellers(query: String) {
-        sellerDataSourceFactory.search(query)
+    fun searchSellers(query: String, dateFrom: String?, dateTo: String?) {
+        sellerDataSourceFactory.search(query, dateFrom, dateTo)
         sellers.value?.dataSource?.invalidate()
     }
 
@@ -82,11 +91,9 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     val fetchError = MediatorLiveData<String>()
 
 
-
     /*Co-Routine*/
     private val apiJob = SupervisorJob()
     private val coroutineScope = CoroutineScope(apiJob + Dispatchers.Main)
-
 
 
     private val _customersScreen = MutableLiveData<Boolean>()
@@ -95,6 +102,12 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
     init {
         _customersScreen.value = true
+
+        /*initializing date queries*/
+        dateFrom.value = null
+        dateFromPersian.value = null
+        dateTo.value = null
+        dateToPersian.value = null
 
         //creating data source factory
         customerDataSourceFactory = CustomerDataSourceFactory(jwt, customerNo)
@@ -142,8 +155,8 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
     fun query(query: String) {
         when (_customersScreen.value) {
-            true -> searchCustomers(query)
-            else -> searchSellers(query)
+            true -> searchCustomers(query, dateFrom.value ?: "", dateTo.value ?: "")
+            else -> searchSellers(query, dateFrom.value ?: "", dateTo.value ?: "")
         }
     }
 
