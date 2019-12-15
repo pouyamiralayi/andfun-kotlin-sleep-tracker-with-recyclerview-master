@@ -37,6 +37,7 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
     @Suppress("MemberVisibilityCanBePrivate")
     fun searchCustomers(query: String, dateFrom: String?, dateTo: String?) {
         customerDataSourceFactory.search(query, dateFrom, dateTo)
+        fetchOwed(query, dateFrom, dateTo)
         customers.value?.dataSource?.invalidate()
     }
 
@@ -49,15 +50,15 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         when (_customersScreen.value) {
             true -> {
                 searchCustomers("", dateFrom.value, dateTo.value)
-                fetchOwed()
+                fetchOwed(null, null, null)
             }
             else -> searchSellers("", dateFrom.value, dateTo.value)
         }
     }
 
-    private fun fetchOwed() {
+    private fun fetchOwed(query:String?, dateFrom: String?, dateTo: String?) {
         coroutineScope.launch {
-            val getCustomersOwed = StrapiApi.retrofitService.getOwed("Bearer $jwt", customerNo)
+            val getCustomersOwed = StrapiApi.retrofitService.getOwed("Bearer $jwt", customerNo, query, dateFrom, dateTo )
             try {
                 val result = getCustomersOwed.await()
                 owed.postValue("بدهکار: " + String.format("%,.0f", result.owed.toDouble()))
@@ -141,7 +142,7 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
         fetchError.addSource(fetchErrorSellers) {
             fetchError.value = fetchErrorSellers.value
         }
-        fetchOwed()
+        fetchOwed(null, null, null)
     }
 
 
@@ -155,7 +156,7 @@ class DataViewModel(val customerName: String, val customerNo: String, private va
 
     fun query(query: String) {
         when (_customersScreen.value) {
-            true -> searchCustomers(query, dateFrom.value ?: "", dateTo.value ?: "")
+            true -> searchCustomers(query, dateFrom.value, dateTo.value )
             else -> searchSellers(query, dateFrom.value ?: "", dateTo.value ?: "")
         }
     }

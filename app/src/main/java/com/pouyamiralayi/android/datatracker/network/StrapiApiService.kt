@@ -28,7 +28,7 @@ private val retrofit = Retrofit.Builder()
 interface StrapiApiService {
 
     @GET("customers/owed")
-    fun getOwed(@Header("Authorization") token: String, @Query("customer_no") customer_no: String):
+    fun getOwed(@Header("Authorization") token: String, @Query("customer_no") customer_no: String, @Query("description_contains") query: String?, @Query("date_gte") dateFrom: String?, @Query("date_lt") dateTo: String?):
             Deferred<OwedResponse>
 
     @GET("customers/count")
